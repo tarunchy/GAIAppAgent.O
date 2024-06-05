@@ -1,0 +1,29 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - closed
+
+jobs:
+  deploy:
+    runs-on: [self-hosted,Linux,X64,omniagent,dlyog02]
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Copy Code (excluding .git)
+      run: |
+        rsync -av --exclude='.git/' . /home/dlyog/ted/omniagent
+
+    - name: Install Dependencies
+      run: |
+        python3.9 -m pip install -r requirements.txt
+      
