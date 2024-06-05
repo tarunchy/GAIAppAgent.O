@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register Application</title>
+</head>
+<body>
+    <h1>Register a new application</h1>
+    <form method="post" action="/register">
+        <label for="app_name">Application Name:</label><br>
+        <input type="text" id="app_name" name="app_name" required><br>
+        <label for="uptime_url">Uptime URL:</label><br>
+        <input type="url" id="uptime_url" name="uptime_url" required><br>
+        <label for="healthcheck_url">Health Check URL:</label><br>
+        <input type="url" id="healthcheck_url" name="healthcheck_url" required><br>
+        <label for="support_dl">Support Email:</label><br>
+        <input type="email" id="support_dl" name="support_dl" required><br>
+        <label for="heartbeat_enabled">Enable Heartbeat Monitoring:</label>
+        <input type="checkbox" id="heartbeat_enabled" name="heartbeat_enabled"><br>
+        <label for="healthcheck_enabled">Enable Health Check Monitoring:</label>
+        <input type="checkbox" id="healthcheck_enabled" name="healthcheck_enabled"><br>
+        <label for="email_notification_enabled">Enable Email Notifications:</label>
+        <input type="checkbox" id="email_notification_enabled" name="email_notification_enabled"><br>
+        <label for="teams_notification_enabled">Enable Teams Notifications:</label>
+        <input type="checkbox" id="teams_notification_enabled" name="teams_notification_enabled"><br>
+        <label for="servicenow_ticket_enabled">Enable ServiceNow Tickets:</label>
+        <input type="checkbox" id="servicenow_ticket_enabled" name="servicenow_ticket_enabled"><br><br>
+        <input type="submit" value="Register">
+    </form>
+</body>
+</html>

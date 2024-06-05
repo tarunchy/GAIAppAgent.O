@@ -1,8 +1,9 @@
 Flask
-Flask-SQLAlchemy
-Flask-Mail
-google-auth
-google-auth-oauthlib
-google-auth-httplib2
-google-api-python-client
+Flask-CORS
+elasticsearch==7.10.0
 requests
+bcrypt
+Flask-Mail
+python-dotenv
+langchain
+langgraph

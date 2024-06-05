@@ -34,7 +34,7 @@ Example:
 - ServiceNow API credentials
 - SMTP server for sending emails
 - Microsoft Teams Webhook URL
-- OpenAI API key
+- LLAMA2 13B NVIDIA TRT Engine Accelerated API Endpoint Compliant with OpenAI Chat Completion API interface
 
 ### Installation
 1. Clone the repository:
