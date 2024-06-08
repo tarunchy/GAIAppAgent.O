@@ -11,8 +11,7 @@ with open('data.json') as f:
 
 @app.route('/')
 def dashboard():
-    selected_data = random.choice(data)
-    return render_template('dashboard.html', data=selected_data)
+    return render_template('dashboard.html')
 
 @app.route('/realtime', methods=['GET'])
 def realtime_data():
