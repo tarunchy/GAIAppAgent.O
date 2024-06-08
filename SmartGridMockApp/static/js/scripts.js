@@ -16,7 +16,7 @@ $(document).ready(function () {
             responsive: true,
             title: {
                 display: true,
-                text: 'Real-time Grid Data'
+                text: 'Real-time Grid Data Simulation'
             },
             scales: {
                 xAxes: [{
@@ -56,4 +56,13 @@ $(document).ready(function () {
     
     fetchData();
     setInterval(fetchData, 3000);
+
+    // Modal functionality
+    $('#helpButton').click(function () {
+        $('#helpModal').removeClass('hidden');
+    });
+
+    $('#closeHelp').click(function () {
+        $('#helpModal').addClass('hidden');
+    });
 });
