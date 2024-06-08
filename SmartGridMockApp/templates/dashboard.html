@@ -3,18 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Grid Monitoring</title>
+    <title>Smart Grid Simulation</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 relative">
     <div class="container mx-auto p-4">
-        <h1 class="text-3xl font-bold mb-4">Smart Grid Monitoring</h1>
-        <div id="gridData" class="p-4 bg-white shadow rounded-lg">
+        <h1 class="text-3xl font-bold mb-4">Smart Grid Simulation</h1>
+        <div class="flex justify-end">
+            <button id="helpButton" class="bg-blue-500 text-white p-2 rounded-full">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </button>
+        </div>
+        <div id="gridData" class="p-4 bg-white shadow rounded-lg mt-4">
             <canvas id="gridChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+    <div id="helpModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
+            <h2 class="text-2xl font-bold mb-4">How to Read the Data</h2>
+            <p>The real-time grid data simulation shows...</p>
+            <ul class="list-disc pl-5">
+                <li><strong>Timestamp:</strong> The time at which the data was recorded.</li>
+                <li><strong>Consumption (kWh):</strong> The amount of power consumed in kilowatt-hours.</li>
+                <li><strong>Voltage (V):</strong> The voltage level of the grid.</li>
+                <li><strong>Frequency (Hz):</strong> The frequency of the grid.</li>
+                <li><strong>Power Factor:</strong> The efficiency of power usage.</li>
+                <li><strong>Reactive Power (kVAR):</strong> The reactive power in kilovolt-amperes reactive.</li>
+                <li><strong>Current (A):</strong> The current flowing through the grid in amperes.</li>
+                <li><strong>Transformer Temperature (°C):</strong> The temperature of the transformer in degrees Celsius.</li>
+            </ul>
+            <button id="closeHelp" class="mt-4 bg-blue-500 text-white p-2 rounded">Close</button>
         </div>
     </div>
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
