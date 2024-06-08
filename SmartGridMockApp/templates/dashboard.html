@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Grid Monitoring</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold mb-4">Smart Grid Monitoring</h1>
+        <div id="gridData" class="p-4 bg-white shadow rounded-lg">
+            <p><strong>Timestamp:</strong> {{ data.Timestamp }}</p>
+            <p><strong>Consumption (kWh):</strong> {{ data.Consumption_kWh }}</p>
+            <p><strong>Voltage (V):</strong> {{ data.Voltage_V }}</p>
+            <p><strong>Frequency (Hz):</strong> {{ data.Frequency_Hz }}</p>
+            <p><strong>Power Factor:</strong> {{ data.PowerFactor }}</p>
+            <p><strong>Reactive Power (kVAR):</strong> {{ data.ReactivePower_kVAR }}</p>
+            <p><strong>Current (A):</strong> {{ data.Current_A }}</p>
+            <p><strong>Transformer Temperature (°C):</strong> {{ data.TransformerTemperature_C }}</p>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>

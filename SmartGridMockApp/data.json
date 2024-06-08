@@ -1,0 +1,301 @@
+{
+    "Ranges": {
+        "Normal": {
+            "Consumption_kWh": "40-200 kWh",
+            "Voltage_V": "230-245 V",
+            "Frequency_Hz": "49.5-50.5 Hz",
+            "PowerFactor": "0.85-1.0",
+            "ReactivePower_kVAR": "0-100 kVAR",
+            "Current_A": "0-1000 A",
+            "TransformerTemperature_C": "0-100 C"
+        },
+        "Peak": {
+            "Consumption_kWh": "200-400 kWh",
+            "Voltage_V": "220-230 V",
+            "Frequency_Hz": "49.0-49.5 Hz",
+            "PowerFactor": "0.80-0.85",
+            "ReactivePower_kVAR": "100-200 kVAR",
+            "Current_A": "1000-2000 A",
+            "TransformerTemperature_C": "100-120 C"
+        },
+        "Low": {
+            "Consumption_kWh": "0-40 kWh",
+            "Voltage_V": "200-230 V",
+            "Frequency_Hz": "48.5-49.0 Hz",
+            "PowerFactor": "0.70-0.80",
+            "ReactivePower_kVAR": "0-50 kVAR",
+            "Current_A": "0-500 A",
+            "TransformerTemperature_C": "0-50 C"
+        },
+        "Fault": {
+            "Consumption_kWh": "0 kWh",
+            "Voltage_V": "0 V",
+            "Frequency_Hz": "0.0 Hz",
+            "PowerFactor": "0.0",
+            "ReactivePower_kVAR": "0 kVAR",
+            "Current_A": "0 A",
+            "TransformerTemperature_C": "0 C"
+        },
+        "Severe": {
+            "Consumption_kWh": "400-500 kWh",
+            "Voltage_V": "170-200 V",
+            "Frequency_Hz": "44.0-48.5 Hz",
+            "PowerFactor": "0.50-0.70",
+            "ReactivePower_kVAR": "200-300 kVAR",
+            "Current_A": "2000-3000 A",
+            "TransformerTemperature_C": "120-150 C"
+        },
+        "Emergency": {
+            "Consumption_kWh": "500+ kWh",
+            "Voltage_V": "< 170 V",
+            "Frequency_Hz": "< 44.0 Hz",
+            "PowerFactor": "< 0.50",
+            "ReactivePower_kVAR": "> 300 kVAR",
+            "Current_A": "> 3000 A",
+            "TransformerTemperature_C": "> 150 C"
+        }
+    },
+    "Data": [
+        {
+            "Timestamp": "2024-06-01 08:00:00",
+            "Consumption_kWh": 60,
+            "Voltage_V": 240,
+            "Frequency_Hz": 50.0,
+            "PowerFactor": 0.95,
+            "ReactivePower_kVAR": 10,
+            "Current_A": 200,
+            "TransformerTemperature_C": 75
+        },
+        {
+            "Timestamp": "2024-06-01 14:00:00",
+            "Consumption_kWh": 320,
+            "Voltage_V": 230,
+            "Frequency_Hz": 49.7,
+            "PowerFactor": 0.92,
+            "ReactivePower_kVAR": 50,
+            "Current_A": 800,
+            "TransformerTemperature_C": 85
+        },
+        {
+            "Timestamp": "2024-06-01 20:00:00",
+            "Consumption_kWh": 180,
+            "Voltage_V": 235,
+            "Frequency_Hz": 50.0,
+            "PowerFactor": 0.98,
+            "ReactivePower_kVAR": 30,
+            "Current_A": 600,
+            "TransformerTemperature_C": 78
+        },
+        {
+            "Timestamp": "2024-06-02 03:00:00",
+            "Consumption_kWh": 50,
+            "Voltage_V": 245,
+            "Frequency_Hz": 50.2,
+            "PowerFactor": 0.97,
+            "ReactivePower_kVAR": 5,
+            "Current_A": 150,
+            "TransformerTemperature_C": 70
+        },
+        {
+            "Timestamp": "2024-06-02 13:00:00",
+            "Consumption_kWh": 350,
+            "Voltage_V": 228,
+            "Frequency_Hz": 49.4,
+            "PowerFactor": 0.88,
+            "ReactivePower_kVAR": 70,
+            "Current_A": 900,
+            "TransformerTemperature_C": 90
+        },
+        {
+            "Timestamp": "2024-06-02 18:00:00",
+            "Consumption_kWh": 170,
+            "Voltage_V": 237,
+            "Frequency_Hz": 50.1,
+            "PowerFactor": 0.96,
+            "ReactivePower_kVAR": 25,
+            "Current_A": 550,
+            "TransformerTemperature_C": 77
+        },
+        {
+            "Timestamp": "2024-06-03 07:00:00",
+            "Consumption_kWh": 55,
+            "Voltage_V": 242,
+            "Frequency_Hz": 50.1,
+            "PowerFactor": 0.98,
+            "ReactivePower_kVAR": 8,
+            "Current_A": 180,
+            "TransformerTemperature_C": 72
+        },
+        {
+            "Timestamp": "2024-06-03 19:00:00",
+            "Consumption_kWh": 340,
+            "Voltage_V": 229,
+            "Frequency_Hz": 49.5,
+            "PowerFactor": 0.90,
+            "ReactivePower_kVAR": 60,
+            "Current_A": 850,
+            "TransformerTemperature_C": 88
+        },
+        {
+            "Timestamp": "2024-06-04 10:00:00",
+            "LoadLevel": "Normal Load",
+            "Consumption_kWh": 160,
+            "Voltage_V": 234,
+            "Frequency_Hz": 50.0,
+            "PowerFactor": 0.95,
+            "ReactivePower_kVAR": 20,
+            "Current_A": 500,
+            "TransformerTemperature_C": 76
+        },
+        {
+            "Timestamp": "2024-06-04 21:00:00",
+            "Consumption_kWh": 320,
+            "Voltage_V": 231,
+            "Frequency_Hz": 49.8,
+            "PowerFactor": 0.93,
+            "ReactivePower_kVAR": 55,
+            "Current_A": 820,
+            "TransformerTemperature_C": 84
+        },
+        {
+            "Timestamp": "2024-06-05 12:00:00",
+            "Consumption_kWh": 0,
+            "Voltage_V": 180,
+            "Frequency_Hz": 45.0,
+            "PowerFactor": 0.0,
+            "ReactivePower_kVAR": 0,
+            "Current_A": 0,
+            "TransformerTemperature_C": 0
+        },
+        {
+            "Timestamp": "2024-06-05 17:00:00",
+            "Consumption_kWh": 70,
+            "Voltage_V": 195,
+            "Frequency_Hz": 47.8,
+            "PowerFactor": 0.60,
+            "ReactivePower_kVAR": 40,
+            "Current_A": 250,
+            "TransformerTemperature_C": 55
+        },
+        {
+            "Timestamp": "2024-06-06 01:00:00",
+            "Consumption_kWh": 0,
+            "Voltage_V": 0,
+            "Frequency_Hz": 0.0,
+            "PowerFactor": 0.0,
+            "ReactivePower_kVAR": 0,
+            "Current_A": 0,
+            "TransformerTemperature_C": 0
+        },
+        {
+            "Timestamp": "2024-06-06 15:00:00",
+            "Consumption_kWh": 400,
+            "Voltage_V": 170,
+            "Frequency_Hz": 44.0,
+            "PowerFactor": 0.50,
+            "ReactivePower_kVAR": 100,
+            "Current_A": 950,
+            "TransformerTemperature_C": 92
+        },
+        {
+            "Timestamp": "2024-06-07 09:00:00",
+            "Consumption_kWh": 30,
+            "Voltage_V": 240,
+            "Frequency_Hz": 50.0,
+            "PowerFactor": 0.97,
+            "ReactivePower_kVAR": 5,
+            "Current_A": 120,
+            "TransformerTemperature_C": 68
+        },
+        {
+            "Timestamp": "2024-06-07 12:00:00",
+            "Consumption_kWh": 370,
+            "Voltage_V": 227,
+            "Frequency_Hz": 49.2,
+            "PowerFactor": 0.85,
+            "ReactivePower_kVAR": 80,
+            "Current_A": 920,
+            "TransformerTemperature_C": 93
+        },
+        {
+            "Timestamp": "2024-06-07 18:00:00",
+            "Consumption_kWh": 150,
+            "Voltage_V": 233,
+            "Frequency_Hz": 50.1,
+            "PowerFactor": 0.94,
+            "ReactivePower_kVAR": 22,
+            "Current_A": 480,
+            "TransformerTemperature_C": 75
+        },
+        {
+            "Timestamp": "2024-06-08 03:00:00",
+            "Consumption_kWh": 45,
+            "Voltage_V": 243,
+            "Frequency_Hz": 50.3,
+            "PowerFactor": 0.98,
+            "ReactivePower_kVAR": 8,
+            "Current_A": 140,
+            "TransformerTemperature_C": 69
+        },
+        {
+            "Timestamp": "2024-06-08 13:00:00",
+            "Consumption_kWh": 330,
+            "Voltage_V": 225,
+            "Frequency_Hz": 49.0,
+            "PowerFactor": 0.82,
+            "ReactivePower_kVAR": 90,
+            "Current_A": 910,
+            "TransformerTemperature_C": 91
+        },
+        {
+            "Timestamp": "2024-06-08 21:00:00",
+            "Consumption_kWh": 180,
+            "Voltage_V": 238,
+            "Frequency_Hz": 49.9,
+            "PowerFactor": 0.95,
+            "ReactivePower_kVAR": 28,
+            "Current_A": 520,
+            "TransformerTemperature_C": 76
+        },
+        {
+            "Timestamp": "2024-06-09 11:00:00",
+            "Consumption_kWh": 0,
+            "Voltage_V": 210,
+            "Frequency_Hz": 46.0,
+            "PowerFactor": 0.0,
+            "ReactivePower_kVAR": 0,
+            "Current_A": 0,
+            "TransformerTemperature_C": 0
+        },
+        {
+            "Timestamp": "2024-06-09 17:00:00",
+            "Consumption_kWh": 90,
+            "Voltage_V": 190,
+            "Frequency_Hz": 48.5,
+            "PowerFactor": 0.70,
+            "ReactivePower_kVAR": 45,
+            "Current_A": 300,
+            "TransformerTemperature_C": 60
+        },
+        {
+            "Timestamp": "2024-06-10 01:00:00",
+            "Consumption_kWh": 0,
+            "Voltage_V": 0,
+            "Frequency_Hz": 0.0,
+            "PowerFactor": 0.0,
+            "ReactivePower_kVAR": 0,
+            "Current_A": 0,
+            "TransformerTemperature_C": 0
+        },
+        {
+            "Timestamp": "2024-06-10 16:00:00",
+            "Consumption_kWh": 410,
+            "Voltage_V": 165,
+            "Frequency_Hz": 43.5,
+            "PowerFactor": 0.45,
+            "ReactivePower_kVAR": 105,
+            "Current_A": 980,
+            "TransformerTemperature_C": 94
+        }
+    ]
+}
