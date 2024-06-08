@@ -19,25 +19,35 @@ $(document).ready(function () {
                 text: 'Real-time Grid Data'
             },
             scales: {
-                x: {
-                    type: 'realtime',
-                    realtime: {
-                        duration: 20000,
-                        refresh: 3000,
-                        delay: 2000,
-                        onRefresh: fetchData
+                xAxes: [{
+                    type: 'time',
+                    time: {
+                        unit: 'second'
+                    },
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Time'
                     }
-                },
-                y: {
-                    beginAtZero: true
-                }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Consumption (kWh)'
+                    },
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
             }
         }
     });
 
     function fetchData() {
         $.getJSON('/realtime', function (data) {
-            chart.data.labels.push(data.Timestamp);
+            var time = new Date(data.Timestamp);
+            chart.data.labels.push(time);
             chart.data.datasets[0].data.push(data.Consumption_kWh);
             chart.update();
             gsap.from("#gridChart", { duration: 1, opacity: 0, y: 50 });
