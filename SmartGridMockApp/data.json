@@ -9,7 +9,7 @@
             "Current_A": "0-1000 A",
             "TransformerTemperature_C": "0-100 C"
         },
-        "Peak": {
+        "P3-Peak": {
             "Consumption_kWh": "200-400 kWh",
             "Voltage_V": "220-230 V",
             "Frequency_Hz": "49.0-49.5 Hz",
@@ -18,7 +18,7 @@
             "Current_A": "1000-2000 A",
             "TransformerTemperature_C": "100-120 C"
         },
-        "Low": {
+        "P4-Low": {
             "Consumption_kWh": "0-40 kWh",
             "Voltage_V": "200-230 V",
             "Frequency_Hz": "48.5-49.0 Hz",
@@ -27,7 +27,7 @@
             "Current_A": "0-500 A",
             "TransformerTemperature_C": "0-50 C"
         },
-        "Fault": {
+        "P1-Fault": {
             "Consumption_kWh": "0 kWh",
             "Voltage_V": "0 V",
             "Frequency_Hz": "0.0 Hz",
@@ -36,7 +36,7 @@
             "Current_A": "0 A",
             "TransformerTemperature_C": "0 C"
         },
-        "Severe": {
+        "P2-Severe": {
             "Consumption_kWh": "400-500 kWh",
             "Voltage_V": "170-200 V",
             "Frequency_Hz": "44.0-48.5 Hz",
@@ -45,7 +45,7 @@
             "Current_A": "2000-3000 A",
             "TransformerTemperature_C": "120-150 C"
         },
-        "Emergency": {
+        "P0-Emergency": {
             "Consumption_kWh": "500+ kWh",
             "Voltage_V": "< 170 V",
             "Frequency_Hz": "< 44.0 Hz",
