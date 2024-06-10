@@ -14,7 +14,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: [self-hosted,Linux,X64,omniagent,dlyog02]
+    runs-on: [self-hosted,Linux,X64,omniagent,dlyog03]
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
