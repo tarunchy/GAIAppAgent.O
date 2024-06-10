@@ -6,7 +6,8 @@ import csv
 import io
 import logging
 import configparser  # Import configparser
-from typing import TypedDict  # Import TypedDict
+from typing import TypedDict, List  # Import TypedDict and List
+import uuid
 from utils.config_loader import load_config_ini
 
 # Load secrets.ini
@@ -27,8 +28,6 @@ servicenow_username = secrets['servicenow_username']
 servicenow_password = secrets['servicenow_password']
 llama3_base_url = secrets['llama3_base_url']
 email_api_url = secrets['email_api_url']
-
-
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
