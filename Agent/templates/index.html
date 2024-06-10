@@ -3,17 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Apps Config</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .ai-monitoring-bg {
+            background-image: url('{{ url_for('static', filename='images/agent1.png') }}');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
 </head>
-<body>
-    <h1>Apps Configuration</h1>
-    <ul>
-        {% for app in apps %}
-        <li>
-            <strong>{{ app.app_id }}</strong> - {{ app.description }}
-            <a href="{{ url_for('edit_app', app_id=app.app_id) }}">Edit</a>
-        </li>
-        {% endfor %}
-    </ul>
-    <a href="{{ url_for('active_apps') }}">View Active Apps</a>
+<body class="bg-gray-100 text-gray-900">
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-6">Apps Configuration</h1>
+        <ul class="space-y-4">
+            {% for app in apps %}
+            <li class="bg-white p-4 rounded shadow flex items-center justify-between {% if app.app_id == 'AI Monitoring' %}ai-monitoring-bg text-white{% endif %}">
+                <div>
+                    <strong class="text-xl">{{ app.app_id }}</strong> - {{ app.description }}
+                </div>
+                <div>
+                    <a href="{{ url_for('edit_app', app_id=app.app_id) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Edit</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <a href="{{ url_for('active_apps') }}" class="mt-6 inline-block bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700">View Active Apps</a>
+    </div>
 </body>
 </html>
