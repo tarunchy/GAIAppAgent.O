@@ -153,7 +153,7 @@
                 var button = $(this);
                 $.ajax({
                     url: '/run_agent/' + appId,
-                    method: 'GET',
+                    method: 'POST',
                     success: function(response) {
                         //alert(response);
                         button.next('.check-icon').removeClass('hidden');
