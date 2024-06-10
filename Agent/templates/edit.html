@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" x-data="app()">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Edit App</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.2.1/dist/cdn.min.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/6POhu/6kk/aL6/5F9AB7m3II/3lRjEBmY5ojwN" crossorigin="anonymous"></script>
+    <style>
+        .modal {
+            display: none;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
     <div class="container mx-auto p-6">
@@ -15,12 +20,20 @@
                 <input type="text" id="url" name="url" value="{{ app.url }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">
             </div>
 
-            <template x-for="field in ['INCIDENT_ANALYSIS_PROMPT', 'ROOT_CAUSE_ANALYSIS_PROMPT', 'REFLECTION_PROMPT', 'P0', 'description']" :key="field">
-                <div>
-                    <label :for="field" class="block text-sm font-medium text-gray-700" x-text="field.replace('_', ' ')"></label>
-                    <textarea :id="field" :name="field" x-model="formData[field]" @click="openPopup(field)" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
-                </div>
-            </template>
+            <div>
+                <label for="INCIDENT_ANALYSIS_PROMPT" class="block text-sm font-medium text-gray-700">Incident Analysis Prompt:</label>
+                <textarea id="INCIDENT_ANALYSIS_PROMPT" name="INCIDENT_ANALYSIS_PROMPT" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
+            </div>
+
+            <div>
+                <label for="ROOT_CAUSE_ANALYSIS_PROMPT" class="block text-sm font-medium text-gray-700">Root Cause Analysis Prompt:</label>
+                <textarea id="ROOT_CAUSE_ANALYSIS_PROMPT" name="ROOT_CAUSE_ANALYSIS_PROMPT" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
+            </div>
+
+            <div>
+                <label for="REFLECTION_PROMPT" class="block text-sm font-medium text-gray-700">Reflection Prompt:</label>
+                <textarea id="REFLECTION_PROMPT" name="REFLECTION_PROMPT" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
+            </div>
 
             <div>
                 <label for="email_address" class="block text-sm font-medium text-gray-700">Email Address:</label>
@@ -33,11 +46,21 @@
             </div>
 
             <div>
+                <label for="P0" class="block text-sm font-medium text-gray-700">P0:</label>
+                <textarea id="P0" name="P0" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
+            </div>
+
+            <div>
                 <label for="enabled" class="block text-sm font-medium text-gray-700">Enabled:</label>
                 <select id="enabled" name="enabled" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">
                     <option value="Yes" {% if app.enabled == 'Yes' %}selected{% endif %}>Yes</option>
                     <option value="No" {% if app.enabled == 'No' %}selected{% endif %}>No</option>
                 </select>
+            </div>
+
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-700">Description:</label>
+                <textarea id="description" name="description" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
             </div>
 
             <div>
@@ -48,44 +71,38 @@
     </div>
 
     <!-- Popup Modal -->
-    <div x-show="showPopup" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+    <div id="popup-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 modal">
         <div class="bg-white p-6 rounded shadow-md w-2/3">
-            <h2 class="text-xl font-bold mb-4" x-text="currentField.replace('_', ' ')"></h2>
-            <textarea x-model="popupContent" class="w-full h-64 p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
+            <h2 class="text-xl font-bold mb-4" id="popup-title"></h2>
+            <textarea id="popup-textarea" class="w-full h-64 p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
             <div class="mt-4 flex justify-end">
-                <button @click="savePopupContent" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 mr-2">Save</button>
-                <button @click="closePopup" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">Close</button>
+                <button id="save-popup" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 mr-2">Save</button>
+                <button id="close-popup" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">Close</button>
             </div>
         </div>
     </div>
 
     <script>
-        function app() {
-            return {
-                showPopup: false,
-                currentField: '',
-                popupContent: '',
-                formData: {
-                    INCIDENT_ANALYSIS_PROMPT: "{{ app.INCIDENT_ANALYSIS_PROMPT }}",
-                    ROOT_CAUSE_ANALYSIS_PROMPT: "{{ app.ROOT_CAUSE_ANALYSIS_PROMPT }}",
-                    REFLECTION_PROMPT: "{{ app.REFLECTION_PROMPT }}",
-                    P0: "{{ app.P0 }}",
-                    description: "{{ app.description }}",
-                },
-                openPopup(field) {
-                    this.currentField = field;
-                    this.popupContent = this.formData[field];
-                    this.showPopup = true;
-                },
-                savePopupContent() {
-                    this.formData[this.currentField] = this.popupContent;
-                    this.closePopup();
-                },
-                closePopup() {
-                    this.showPopup = false;
-                }
-            }
-        }
+        $(document).ready(function() {
+            let currentTextarea;
+
+            $('textarea').on('click', function() {
+                currentTextarea = $(this);
+                const fieldLabel = $(this).prev('label').text();
+                $('#popup-title').text(fieldLabel);
+                $('#popup-textarea').val(currentTextarea.val());
+                $('#popup-modal').show();
+            });
+
+            $('#save-popup').on('click', function() {
+                currentTextarea.val($('#popup-textarea').val());
+                $('#popup-modal').hide();
+            });
+
+            $('#close-popup').on('click', function() {
+                $('#popup-modal').hide();
+            });
+        });
     </script>
 </body>
 </html>
