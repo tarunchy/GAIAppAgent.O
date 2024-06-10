@@ -47,7 +47,7 @@ def edit_app(app_id):
 @app.route('/active_apps')
 def active_apps():
     apps_config = load_apps_config()
-    active_apps = [app for app in apps_config if app['enabled'] == 'Yes']
+    active_apps = [app for app in apps_config]
     return render_template('active_apps.html', apps=active_apps)
 
 @app.route('/run_agent/<app_id>')
