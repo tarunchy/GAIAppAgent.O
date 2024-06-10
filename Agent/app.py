@@ -1,5 +1,6 @@
 import logging
 import time
+import queue
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from dotenv import load_dotenv
 from threading import Thread
@@ -15,6 +16,24 @@ app = Flask(__name__)
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Initialize a queue and a set to track queued tasks
+task_queue = queue.Queue()
+queued_apps = set()
+
+def worker():
+    while True:
+        app_id = task_queue.get()
+        if app_id is None:
+            break
+        run_agent_for_app(app_id)
+        task_queue.task_done()
+        # Remove app_id from the set after processing
+        queued_apps.remove(app_id)
+
+# Start the worker thread
+worker_thread = Thread(target=worker, daemon=True)
+worker_thread.start()
 
 @app.route('/')
 def index():
@@ -71,11 +90,14 @@ def active_apps():
     active_apps = [app for app in apps_config if app['enabled'] == 'Yes']
     return render_template('active_apps.html', apps=active_apps)
 
-@app.route('/run_agent/<app_id>')
+@app.route('/run_agent/<app_id>', methods=['POST'])
 def run_agent(app_id):
-    thread = Thread(target=run_agent_for_app, args=(app_id,))
-    thread.start()
-    return jsonify({'status': f'Started agent for {app_id}'})
+    if app_id in queued_apps:
+        return jsonify({'status': f'Agent for {app_id} is already in queue'})
+    
+    queued_apps.add(app_id)
+    task_queue.put(app_id)
+    return jsonify({'status': f'Queued agent for {app_id}'})
 
 if __name__ == '__main__':
     monitor_thread = Thread(target=continuous_monitoring, daemon=True)
