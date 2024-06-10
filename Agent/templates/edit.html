@@ -12,45 +12,45 @@
 <body class="bg-gray-100 text-gray-900">
     <div class="container mx-auto p-6">
         <h1 class="text-3xl font-bold mb-6">Edit App - {{ app.app_id }}</h1>
-        <form method="POST" class="bg-white p-6 rounded shadow-md space-y-4">
+        <div id="edit-app-form" class="bg-white p-6 rounded shadow-md space-y-4">
             <div>
                 <label for="url" class="block text-sm font-medium text-gray-700">URL:</label>
-                <input type="text" id="url" name="url" value="{{ app.url }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                <input type="text" id="url" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" value="{{ app.url }}">
             </div>
 
             <div>
                 <label for="incident_analysis_prompt" class="block text-sm font-medium text-gray-700">Incident Analysis Prompt:</label>
-                <textarea id="incident_analysis_prompt" name="incident_analysis_prompt" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">{{ app.INCIDENT_ANALYSIS_PROMPT }}</textarea>
+                <textarea id="incident_analysis_prompt" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">{{ app.INCIDENT_ANALYSIS_PROMPT }}</textarea>
             </div>
 
             <div>
                 <label for="root_cause_analysis_prompt" class="block text-sm font-medium text-gray-700">Root Cause Analysis Prompt:</label>
-                <textarea id="root_cause_analysis_prompt" name="root_cause_analysis_prompt" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">{{ app.ROOT_CAUSE_ANALYSIS_PROMPT }}</textarea>
+                <textarea id="root_cause_analysis_prompt" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">{{ app.ROOT_CAUSE_ANALYSIS_PROMPT }}</textarea>
             </div>
 
             <div>
                 <label for="reflection_prompt" class="block text-sm font-medium text-gray-700">Reflection Prompt:</label>
-                <textarea id="reflection_prompt" name="reflection_prompt" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">{{ app.REFLECTION_PROMPT }}</textarea>
+                <textarea id="reflection_prompt" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">{{ app.REFLECTION_PROMPT }}</textarea>
             </div>
 
             <div>
                 <label for="email_address" class="block text-sm font-medium text-gray-700">Email Address:</label>
-                <input type="text" id="email_address" name="email_address" value="{{ app.email_address }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                <input type="text" id="email_address" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" value="{{ app.email_address }}">
             </div>
 
             <div>
                 <label for="teams_webhook_url" class="block text-sm font-medium text-gray-700">Teams Webhook URL:</label>
-                <input type="text" id="teams_webhook_url" name="teams_webhook_url" value="{{ app.teams_webhook_url }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                <input type="text" id="teams_webhook_url" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" value="{{ app.teams_webhook_url }}">
             </div>
 
             <div>
                 <label for="p0" class="block text-sm font-medium text-gray-700">P0:</label>
-                <textarea id="p0" name="p0" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">{{ app.P0 }}</textarea>
+                <textarea id="p0" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">{{ app.P0 }}</textarea>
             </div>
 
             <div>
                 <label for="enabled" class="block text-sm font-medium text-gray-700">Enabled:</label>
-                <select id="enabled" name="enabled" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                <select id="enabled" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">
                     <option value="Yes" {% if app.enabled == 'Yes' %}selected{% endif %}>Yes</option>
                     <option value="No" {% if app.enabled == 'No' %}selected{% endif %}>No</option>
                 </select>
@@ -58,13 +58,13 @@
 
             <div>
                 <label for="description" class="block text-sm font-medium text-gray-700">Description:</label>
-                <textarea id="description" name="description" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">{{ app.description }}</textarea>
+                <textarea id="description" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">{{ app.description }}</textarea>
             </div>
 
             <div>
-                <input type="submit" value="Save" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer">
+                <button id="save-btn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer">Save</button>
             </div>
-        </form>
+        </div>
         <a href="{{ url_for('index') }}" class="mt-4 inline-block bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700">Back to Apps List</a>
     </div>
 
@@ -82,62 +82,89 @@
 
     <script>
         $(document).ready(function() {
-    let currentTextarea;
+            let currentTextarea;
 
-    $('#incident_analysis_prompt').on('click', function() {
-        
-        $('#popup-title').text('Incident Analysis Prompt');
-        $('#popup-textarea').val($('#incident_analysis_prompt').val());
-        $('#popup-modal').removeClass('hidden');
-    });
+            $('#incident_analysis_prompt').on('click', function() {
+                currentTextarea = $(this);
+                $('#popup-title').text('Incident Analysis Prompt');
+                $('#popup-textarea').val($(this).val());
+                $('#popup-modal').removeClass('hidden');
+            });
 
-    $('#root_cause_analysis_prompt').on('click', function() {
-        currentTextarea = $(this);
-        $('#popup-title').text('Root Cause Analysis Prompt');
-        $('#popup-textarea').val( $('#root_cause_analysis_prompt').val());
-        $('#popup-modal').removeClass('hidden');
-    });
+            $('#root_cause_analysis_prompt').on('click', function() {
+                currentTextarea = $(this);
+                $('#popup-title').text('Root Cause Analysis Prompt');
+                $('#popup-textarea').val($(this).val());
+                $('#popup-modal').removeClass('hidden');
+            });
 
-    $('#reflection_prompt').on('click', function() {
-        currentTextarea = $(this);
-        $('#popup-title').text('Reflection Prompt');
-        $('#popup-textarea').val($('#reflection_prompt').val());
-        $('#popup-modal').removeClass('hidden');
-    });
+            $('#reflection_prompt').on('click', function() {
+                currentTextarea = $(this);
+                $('#popup-title').text('Reflection Prompt');
+                $('#popup-textarea').val($(this).val());
+                $('#popup-modal').removeClass('hidden');
+            });
 
-    $('#p0').on('click', function() {
-        currentTextarea = $(this);
-        $('#popup-title').text('P0');
-        $('#popup-textarea').val( $('#p0').val());
-        $('#popup-modal').removeClass('hidden');
-    });
+            $('#p0').on('click', function() {
+                currentTextarea = $(this);
+                $('#popup-title').text('P0');
+                $('#popup-textarea').val($(this).val());
+                $('#popup-modal').removeClass('hidden');
+            });
 
-    $('#description').on('click', function() {
-        currentTextarea = $(this);
-        $('#popup-title').text('Description');
-        $('#popup-textarea').val($('#description').val());
-        $('#popup-modal').removeClass('hidden');
-    });
+            $('#description').on('click', function() {
+                currentTextarea = $(this);
+                $('#popup-title').text('Description');
+                $('#popup-textarea').val($(this).val());
+                $('#popup-modal').removeClass('hidden');
+            });
 
-    $('#save-popup').on('click', function() {
-        if (currentTextarea) {
-            currentTextarea.val($('#popup-textarea').val());
-        }
-        $('#popup-modal').addClass('hidden');
-    });
+            $('#save-popup').on('click', function() {
+                if (currentTextarea) {
+                    currentTextarea.val($('#popup-textarea').val());
+                }
+                $('#popup-modal').addClass('hidden');
+            });
 
-    $('#close-popup').on('click', function() {
-        $('#popup-modal').addClass('hidden');
-    });
+            $('#close-popup').on('click', function() {
+                $('#popup-modal').addClass('hidden');
+            });
 
-    // Optionally, close the modal when clicking outside the modal content
-    $('#popup-modal').on('click', function(event) {
-        if ($(event.target).is($('#popup-modal'))) {
-            $('#popup-modal').addClass('hidden');
-        }
-    });
-});
+            // Optionally, close the modal when clicking outside the modal content
+            $('#popup-modal').on('click', function(event) {
+                if ($(event.target).is($('#popup-modal'))) {
+                    $('#popup-modal').addClass('hidden');
+                }
+            });
 
+            $('#save-btn').on('click', function() {
+                const appData = {
+                    url: $('#url').val(),
+                    INCIDENT_ANALYSIS_PROMPT: $('#incident_analysis_prompt').val(),
+                    ROOT_CAUSE_ANALYSIS_PROMPT: $('#root_cause_analysis_prompt').val(),
+                    REFLECTION_PROMPT: $('#reflection_prompt').val(),
+                    email_address: $('#email_address').val(),
+                    teams_webhook_url: $('#teams_webhook_url').val(),
+                    P0: $('#p0').val(),
+                    enabled: $('#enabled').val(),
+                    description: $('#description').val()
+                };
+
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(appData),
+                    success: function(response) {
+                        alert('App configuration saved successfully!');
+                        window.location.href = '{{ url_for("index") }}';
+                    },
+                    error: function(error) {
+                        alert('Error saving app configuration.');
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 import logging
 import time
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from dotenv import load_dotenv
 from threading import Thread
 from utils.config_loader import load_apps_config, save_apps_config
@@ -29,27 +29,29 @@ def edit_app(app_id):
         return "App not found", 404
 
     if request.method == 'POST':
-        app_config['url'] = request.form['url']
-        app_config['INCIDENT_ANALYSIS_PROMPT'] = request.form['INCIDENT_ANALYSIS_PROMPT']
-        app_config['ROOT_CAUSE_ANALYSIS_PROMPT'] = request.form['ROOT_CAUSE_ANALYSIS_PROMPT']
-        app_config['REFLECTION_PROMPT'] = request.form['REFLECTION_PROMPT']
-        app_config['email_address'] = request.form['email_address']
-        app_config['teams_webhook_url'] = request.form['teams_webhook_url']
-        app_config['P0'] = request.form['P0']
-        app_config['enabled'] = request.form['enabled']
-        app_config['description'] = request.form['description']
+        data = request.get_json()
+        app_config['url'] = data.get('url')
+        app_config['INCIDENT_ANALYSIS_PROMPT'] = data.get('INCIDENT_ANALYSIS_PROMPT')
+        app_config['ROOT_CAUSE_ANALYSIS_PROMPT'] = data.get('ROOT_CAUSE_ANALYSIS_PROMPT')
+        app_config['REFLECTION_PROMPT'] = data.get('REFLECTION_PROMPT')
+        app_config['email_address'] = data.get('email_address')
+        app_config['teams_webhook_url'] = data.get('teams_webhook_url')
+        app_config['P0'] = data.get('P0')
+        app_config['enabled'] = data.get('enabled')
+        app_config['description'] = data.get('description')
 
         save_apps_config(apps_config)
-        return redirect(url_for('index'))
+        return jsonify({'status': 'success'})
 
     return render_template('edit.html', app=app_config)
 
 @app.route('/add', methods=['POST'])
 def add_app():
     apps_config = load_apps_config()
+    data = request.get_json()
     new_app = {
-        'app_id': request.form['app_id'],
-        'description': request.form['description'],
+        'app_id': data.get('app_id'),
+        'description': data.get('description'),
         'url': '',
         'INCIDENT_ANALYSIS_PROMPT': '',
         'ROOT_CAUSE_ANALYSIS_PROMPT': '',
@@ -61,7 +63,7 @@ def add_app():
     }
     apps_config.append(new_app)
     save_apps_config(apps_config)
-    return redirect(url_for('index'))
+    return jsonify({'status': 'success'})
 
 @app.route('/active_apps')
 def active_apps():
@@ -73,16 +75,9 @@ def active_apps():
 def run_agent(app_id):
     thread = Thread(target=run_agent_for_app, args=(app_id,))
     thread.start()
-    return f"Started agent for {app_id}", 200
+    return jsonify({'status': f'Started agent for {app_id}'})
 
 if __name__ == '__main__':
     monitor_thread = Thread(target=continuous_monitoring, daemon=True)
     monitor_thread.start()
     app.run(host='0.0.0.0', port=8899, debug=True, use_reloader=True)
-
-
-
-
-
-
-
