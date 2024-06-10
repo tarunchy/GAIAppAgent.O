@@ -21,6 +21,10 @@
             font-size: 0.875rem;
             margin-top: 0.25rem;
         }
+        .agent-response-modal {
+            background: url('/static/images/agent_flow.png') no-repeat center center;
+            background-size: cover;
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
@@ -127,6 +131,17 @@
         </div>
     </div>
 
+    <!-- Agent Response Modal -->
+    <div id="agent-response-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-6 rounded shadow-md w-full max-w-lg mx-4 space-y-4 agent-response-modal">
+            <h2 class="text-xl font-bold mb-4">Agent Response</h2>
+            <div id="agent-response-content" class="p-4 bg-white bg-opacity-75 rounded-md shadow-md"></div>
+            <div class="flex justify-end">
+                <button type="button" id="close-agent-response" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">Close</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function() {
             // Show Add App Modal
@@ -137,6 +152,11 @@
             // Hide Add App Modal
             $('#close-add-app').on('click', function() {
                 $('#add-app-modal').addClass('hidden');
+            });
+
+            // Hide Agent Response Modal
+            $('#close-agent-response').on('click', function() {
+                $('#agent-response-modal').addClass('hidden');
             });
 
             // Save New App
@@ -187,24 +207,24 @@
             // Run Agent Button Functionality
             $('.run-agent-button').on('click', function() {
                 var appId = $(this).data('app-id');
-                var button = $(this);
                 $.ajax({
                     url: '/run_agent/' + appId,
                     method: 'POST',
                     success: function(response) {
-                        alert(response.status);
-                        button.next('.check-icon').removeClass('hidden');
+                        $('#agent-response-content').text(response.status);
+                        $('#agent-response-modal').removeClass('hidden');
                     },
                     error: function(xhr) {
-                        alert('Error starting agent: ' + xhr.responseText);
+                        $('#agent-response-content').text('Error starting agent: ' + xhr.responseText);
+                        $('#agent-response-modal').removeClass('hidden');
                     }
                 });
             });
 
             // Optionally, close the modal when clicking outside the modal content
-            $('#add-app-modal').on('click', function(event) {
-                if ($(event.target).is($('#add-app-modal'))) {
-                    $('#add-app-modal').addClass('hidden');
+            $('#add-app-modal, #agent-response-modal').on('click', function(event) {
+                if ($(event.target).is($('#add-app-modal')) || $(event.target).is($('#agent-response-modal'))) {
+                    $(this).addClass('hidden');
                 }
             });
         });
