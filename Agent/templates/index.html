@@ -3,14 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Apps Config</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.1/dist/tailwind.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/darkmode-js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
         .ai-monitoring-bg {
             background-image: url('{{ url_for('static', filename='images/agent1.png') }}');
             background-size: cover;
             background-position: center;
         }
+        .modal {
+            display: none;
+        }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/6POhu/6kk/aL6/5F9AB7m3II/3lRjEBmY5ojwN" crossorigin="anonymous"></script>
 </head>
 <body class="bg-gray-100 text-gray-900">
     <div class="container mx-auto p-6">
@@ -27,7 +36,47 @@
             </li>
             {% endfor %}
         </ul>
+        <button id="add-app-button" class="mt-6 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">Add New App</button>
         <a href="{{ url_for('active_apps') }}" class="mt-6 inline-block bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700">View Active Apps</a>
     </div>
+
+    <!-- Add New App Modal -->
+    <div id="add-app-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 modal">
+        <div class="bg-white p-6 rounded shadow-md w-2/3">
+            <h2 class="text-xl font-bold mb-4">Add New App</h2>
+            <form id="add-app-form" action="{{ url_for('add_app') }}" method="POST" class="space-y-4">
+                <div>
+                    <label for="new_app_id" class="block text-sm font-medium text-gray-700">App ID:</label>
+                    <input type="text" id="new_app_id" name="app_id" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                </div>
+
+                <div>
+                    <label for="new_description" class="block text-sm font-medium text-gray-700">Description:</label>
+                    <textarea id="new_description" name="description" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="button" id="close-add-app" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 mr-2">Cancel</button>
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#add-app-button').on('click', function() {
+                $('#add-app-modal').show();
+            });
+
+            $('#close-add-app').on('click', function() {
+                $('#add-app-modal').hide();
+            });
+
+            $('#add-app-form').on('submit', function() {
+                $('#add-app-modal').hide();
+            });
+        });
+    </script>
 </body>
 </html>

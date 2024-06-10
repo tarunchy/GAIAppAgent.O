@@ -44,6 +44,25 @@ def edit_app(app_id):
 
     return render_template('edit.html', app=app_config)
 
+@app.route('/add', methods=['POST'])
+def add_app():
+    apps_config = load_apps_config()
+    new_app = {
+        'app_id': request.form['app_id'],
+        'description': request.form['description'],
+        'url': '',
+        'INCIDENT_ANALYSIS_PROMPT': '',
+        'ROOT_CAUSE_ANALYSIS_PROMPT': '',
+        'REFLECTION_PROMPT': '',
+        'email_address': '',
+        'teams_webhook_url': '',
+        'P0': '',
+        'enabled': 'No'
+    }
+    apps_config.append(new_app)
+    save_apps_config(apps_config)
+    return redirect(url_for('index'))
+
 @app.route('/active_apps')
 def active_apps():
     apps_config = load_apps_config()
