@@ -9,8 +9,7 @@ from utils.config_loader import load_config_ini
 
 # Load secrets.ini
 secrets_config = load_config_ini()
-secrets = configparser.ConfigParser()
-secrets.read(secrets_config['settings']['secrets_config_path'])
+secrets = secrets_config['settings']['secrets_config_path']
 
 servicenow_instance = secrets['secrets']['servicenow_instance']
 servicenow_username = secrets['secrets']['servicenow_username']
