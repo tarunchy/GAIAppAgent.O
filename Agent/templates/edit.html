@@ -82,41 +82,62 @@
 
     <script>
         $(document).ready(function() {
-            // Cache jQuery selectors
-            const $popupModal = $('#popup-modal');
-            const $popupTitle = $('#popup-title');
-            const $popupTextarea = $('#popup-textarea');
-            const $savePopup = $('#save-popup');
-            const $closePopup = $('#close-popup');
-            
-            let currentTextarea;
+    let currentTextarea;
 
-            $('textarea').on('click', function() {
-                currentTextarea = $(this);
-                const fieldLabel = $('label[for="' + currentTextarea.attr('id') + '"]').text();
-                $popupTitle.text(fieldLabel);
-                $popupTextarea.val(currentTextarea.val());
-                $popupModal.removeClass('hidden');
-            });
+    $('#incident_analysis_prompt').on('click', function() {
+        
+        $('#popup-title').text('Incident Analysis Prompt');
+        $('#popup-textarea').val($('#incident_analysis_prompt').val());
+        $('#popup-modal').removeClass('hidden');
+    });
 
-            $savePopup.on('click', function() {
-                if (currentTextarea) {
-                    currentTextarea.val($popupTextarea.val());
-                }
-                $popupModal.addClass('hidden');
-            });
+    $('#root_cause_analysis_prompt').on('click', function() {
+        currentTextarea = $(this);
+        $('#popup-title').text('Root Cause Analysis Prompt');
+        $('#popup-textarea').val( $('#root_cause_analysis_prompt').val());
+        $('#popup-modal').removeClass('hidden');
+    });
 
-            $closePopup.on('click', function() {
-                $popupModal.addClass('hidden');
-            });
+    $('#reflection_prompt').on('click', function() {
+        currentTextarea = $(this);
+        $('#popup-title').text('Reflection Prompt');
+        $('#popup-textarea').val($('#reflection_prompt').val());
+        $('#popup-modal').removeClass('hidden');
+    });
 
-            // Optionally, close the modal when clicking outside the modal content
-            $popupModal.on('click', function(event) {
-                if ($(event.target).is($popupModal)) {
-                    $popupModal.addClass('hidden');
-                }
-            });
-        });
+    $('#p0').on('click', function() {
+        currentTextarea = $(this);
+        $('#popup-title').text('P0');
+        $('#popup-textarea').val( $('#p0').val());
+        $('#popup-modal').removeClass('hidden');
+    });
+
+    $('#description').on('click', function() {
+        currentTextarea = $(this);
+        $('#popup-title').text('Description');
+        $('#popup-textarea').val($('#description').val());
+        $('#popup-modal').removeClass('hidden');
+    });
+
+    $('#save-popup').on('click', function() {
+        if (currentTextarea) {
+            currentTextarea.val($('#popup-textarea').val());
+        }
+        $('#popup-modal').addClass('hidden');
+    });
+
+    $('#close-popup').on('click', function() {
+        $('#popup-modal').addClass('hidden');
+    });
+
+    // Optionally, close the modal when clicking outside the modal content
+    $('#popup-modal').on('click', function(event) {
+        if ($(event.target).is($('#popup-modal'))) {
+            $('#popup-modal').addClass('hidden');
+        }
+    });
+});
+
     </script>
 </body>
 </html>
