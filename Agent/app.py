@@ -66,7 +66,7 @@ def add_app():
 @app.route('/active_apps')
 def active_apps():
     apps_config = load_apps_config()
-    active_apps = [app for app in apps_config]
+    active_apps = [app for app in apps_config if app['enabled'] == 'Yes']
     return render_template('active_apps.html', apps=active_apps)
 
 @app.route('/run_agent/<app_id>')
@@ -79,6 +79,10 @@ if __name__ == '__main__':
     monitor_thread = Thread(target=continuous_monitoring, daemon=True)
     monitor_thread.start()
     app.run(host='0.0.0.0', port=8899, debug=True, use_reloader=True)
+
+
+
+
 
 
 

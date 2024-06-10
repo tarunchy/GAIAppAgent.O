@@ -33,6 +33,19 @@
                 <div>
                     <a href="{{ url_for('edit_app', app_id=app.app_id) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Edit</a>
                 </div>
+                <div>
+                    <button
+                        @click="agents['{{ app.app_id }}'] = true"
+                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none"
+                    >
+                        Run Agent
+                    </button>
+                    <template x-if="agents['{{ app.app_id }}']">
+                        <span class="ml-2 text-green-500">
+                            &#10003; <!-- Check icon -->
+                        </span>
+                    </template>
+                </div>
             </li>
             {% endfor %}
         </ul>
