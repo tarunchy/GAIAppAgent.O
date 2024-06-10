@@ -40,7 +40,7 @@ def index():
     apps_config = load_apps_config()
     return render_template('index.html', apps=apps_config)
 
-@app.route('/edit/<app_id>', methods=['POST'])
+@app.route('/edit/<app_id>', methods=['GET', 'POST'])
 def edit_app(app_id):
     apps_config = load_apps_config()
     app_config = next((app for app in apps_config if app['app_id'] == app_id), None)
