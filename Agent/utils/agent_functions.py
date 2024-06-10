@@ -6,6 +6,7 @@ import csv
 import io
 import logging
 import configparser  # Import configparser
+from typing import TypedDict  # Import TypedDict
 from utils.config_loader import load_config_ini
 
 # Load secrets.ini
