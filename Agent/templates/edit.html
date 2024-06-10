@@ -19,18 +19,18 @@
             </div>
 
             <div>
-                <label for="INCIDENT_ANALYSIS_PROMPT" class="block text-sm font-medium text-gray-700">Incident Analysis Prompt:</label>
-                <textarea id="INCIDENT_ANALYSIS_PROMPT" name="INCIDENT_ANALYSIS_PROMPT" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">{{ app.INCIDENT_ANALYSIS_PROMPT }}</textarea>
+                <label for="incident_analysis_prompt" class="block text-sm font-medium text-gray-700">Incident Analysis Prompt:</label>
+                <textarea id="incident_analysis_prompt" name="incident_analysis_prompt" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">{{ app.INCIDENT_ANALYSIS_PROMPT }}</textarea>
             </div>
 
             <div>
-                <label for="ROOT_CAUSE_ANALYSIS_PROMPT" class="block text-sm font-medium text-gray-700">Root Cause Analysis Prompt:</label>
-                <textarea id="ROOT_CAUSE_ANALYSIS_PROMPT" name="ROOT_CAUSE_ANALYSIS_PROMPT" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">{{ app.ROOT_CAUSE_ANALYSIS_PROMPT }}</textarea>
+                <label for="root_cause_analysis_prompt" class="block text-sm font-medium text-gray-700">Root Cause Analysis Prompt:</label>
+                <textarea id="root_cause_analysis_prompt" name="root_cause_analysis_prompt" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">{{ app.ROOT_CAUSE_ANALYSIS_PROMPT }}</textarea>
             </div>
 
             <div>
-                <label for="REFLECTION_PROMPT" class="block text-sm font-medium text-gray-700">Reflection Prompt:</label>
-                <textarea id="REFLECTION_PROMPT" name="REFLECTION_PROMPT" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">{{ app.REFLECTION_PROMPT }}</textarea>
+                <label for="reflection_prompt" class="block text-sm font-medium text-gray-700">Reflection Prompt:</label>
+                <textarea id="reflection_prompt" name="reflection_prompt" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">{{ app.REFLECTION_PROMPT }}</textarea>
             </div>
 
             <div>
@@ -44,8 +44,8 @@
             </div>
 
             <div>
-                <label for="P0" class="block text-sm font-medium text-gray-700">P0:</label>
-                <textarea id="P0" name="P0" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">{{ app.P0 }}</textarea>
+                <label for="p0" class="block text-sm font-medium text-gray-700">P0:</label>
+                <textarea id="p0" name="p0" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">{{ app.P0 }}</textarea>
             </div>
 
             <div>
@@ -93,7 +93,7 @@
 
             $('textarea').on('click', function() {
                 currentTextarea = $(this);
-                const fieldLabel = currentTextarea.prev('label').text();
+                const fieldLabel = $('label[for="' + currentTextarea.attr('id') + '"]').text();
                 $popupTitle.text(fieldLabel);
                 $popupTextarea.val(currentTextarea.val());
                 $popupModal.removeClass('hidden');
