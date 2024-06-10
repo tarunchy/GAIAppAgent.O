@@ -207,6 +207,7 @@
                         console.log(response.status);
                         button.next('.check-icon').removeClass('hidden');
                         $('#agent-response-content').text(response.status);
+                        $('#agent-response-modal').removeClass('hidden');
                     },
                     error: function(xhr) {
                         console.log('Error starting agent: ' + xhr.responseText);
