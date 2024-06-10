@@ -8,28 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/darkmode-js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <style>
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.75);
-            justify-content: center;
-            align-items: center;
-            z-index: 50;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 600px;
-        }
-    </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
     <div class="container mx-auto p-6">
@@ -91,8 +69,9 @@
     </div>
 
     <!-- Popup Modal -->
-    <div id="popup-modal" class="modal">
-        <div class="modal-content">
+    <!-- Popup Modal -->
+    <div id="popup-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-6 rounded shadow-md w-full max-w-lg mx-4">
             <h2 class="text-xl font-bold mb-4" id="popup-title"></h2>
             <textarea id="popup-textarea" class="w-full h-64 p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
             <div class="mt-4 flex justify-end">
@@ -102,23 +81,29 @@
         </div>
     </div>
 
+
     <script>
-        $(document).ready(function() {
-            let currentTextarea;
+       $(document).ready(function() {
+    let currentTextarea;
 
-            $('textarea').on('click', function() {
-                currentTextarea = $(this);
-                const fieldLabel = $(this).prev('label').text();
-                $('#popup-title').text(fieldLabel);
-                $('#popup-textarea').val(currentTextarea.val());
-                $('#popup-modal').show();
-            });
+    $('textarea').on('click', function() {
+        currentTextarea = $(this);
+        const fieldLabel = $(this).prev('label').text();
+        $('#popup-title').text(fieldLabel);
+        $('#popup-textarea').val(currentTextarea.val());
+        $('#popup-modal').show();
+    });
 
-            $('#save-popup, #close-popup').on('click', function() {
-                currentTextarea.val($('#popup-textarea').val());
-                $('#popup-modal').hide();
-            });
-        });
+    $('#save-popup').on('click', function() {
+        currentTextarea.val($('#popup-textarea').val());
+        $('#popup-modal').hide();
+    });
+
+    $('#close-popup').on('click', function() {
+        $('#popup-modal').hide();
+    });
+});
+
     </script>
 </body>
 </html>
