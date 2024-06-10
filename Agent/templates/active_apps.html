@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Active Apps</title>
+</head>
+<body>
+    <h1>Active Apps</h1>
+    <ul>
+        {% for app in apps %}
+        <li>
+            <strong>{{ app.app_id }}</strong> - {{ app.description }}
+            <a href="{{ url_for('run_agent', app_id=app.app_id) }}">Run Agent</a>
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('index') }}">Back to Apps List</a>
+</body>
+</html>
