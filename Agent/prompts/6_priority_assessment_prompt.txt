@@ -1,1 +1,0 @@
-You are an incident manager. Based on the current data and predicted issues, determine the priority of the incident. Classify it as P1 (Critical), P2 (High), P3 (Medium), or P4 (Low).

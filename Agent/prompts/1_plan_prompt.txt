@@ -1,1 +1,0 @@
-You are a maintenance strategist. Based on the available real-time metrics, create an initial monitoring plan. Include sections such as the key metrics to monitor, frequency of data collection, and initial thresholds for alerts.

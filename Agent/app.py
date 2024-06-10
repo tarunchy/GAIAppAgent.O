@@ -1,126 +1,65 @@
-from flask import Flask, render_template, jsonify, request
-import threading
+import logging
 import time
-from langgraph.graph import StateGraph, END
-from langgraph.checkpoint.sqlite import SqliteSaver
-import actions
+from flask import Flask, render_template, request, redirect, url_for
+from dotenv import load_dotenv
+from threading import Thread
+from utils.config_loader import load_apps_config, save_apps_config
+from utils.state_graph import run_agent_for_app, continuous_monitoring
 
+# Load environment variables
+load_dotenv()
+
+# Initialize Flask application
 app = Flask(__name__)
 
-# Initialize in-memory SQLite
-memory = SqliteSaver.from_conn_string(":memory:")
-
-# Define AgentState TypedDict (if not defined in actions.py)
-class AgentState(TypedDict):
-    equipment_id: str
-    historical_data: str
-    current_status: str
-    data: dict
-    analysis: dict
-    prediction: str
-    maintenance_plan: str
-    priority: str
-    ticket: str
-    email: str
-    teams: str
-    reflection: str
-    plan: str
-
-# Define the graph structure
-builder = StateGraph(AgentState)
-
-builder.add_node("plan", actions.plan_node)
-builder.add_node("monitor", actions.monitoring_node)
-builder.add_node("analyze", actions.analysis_node)
-builder.add_node("predict_failure", actions.prediction_node)
-builder.add_node("plan_maintenance", actions.maintenance_plan_node)
-builder.add_node("assess_priority", actions.priority_assessment_node)
-builder.add_node("create_ticket", actions.create_ticket_node)
-builder.add_node("email_notification", actions.email_notification_node)
-builder.add_node("teams_notification", actions.teams_notification_node)
-builder.add_node("self_reflect", actions.self_reflection_node)
-
-builder.set_entry_point("plan")
-
-builder.add_conditional_edges(
-    "plan_maintenance", 
-    actions.should_continue, 
-    {END: END, "self_reflect": "self_reflect"}
-)
-
-builder.add_edge("plan", "monitor")
-builder.add_edge("monitor", "analyze")
-builder.add_edge("analyze", "predict_failure")
-builder.add_edge("predict_failure", "plan_maintenance")
-builder.add_edge("plan_maintenance", "assess_priority")
-builder.add_edge("assess_priority", "create_ticket")
-builder.add_edge("create_ticket", "email_notification")
-builder.add_edge("email_notification", "teams_notification")
-builder.add_edge("teams_notification", "self_reflect")
-builder.add_edge("self_reflect", "monitor")
-
-graph = builder.compile(checkpointer=memory)
-
-@app.route('/trigger', methods=['POST'])
-def trigger_agent():
-    data = request.json
-    thread_id = data.get('thread_id', "1")
-    max_iterations = data.get('max_iterations', 2)
-    revision_number = data.get('revision_number', 1)
-
-    initial_state = {
-        'equipment_id': "transformer_123",
-        "historical_data": "temperature, voltage, current over the past 5 years",
-        "current_status": "",
-        "data": {},
-        "analysis": {},
-        "prediction": "",
-        "maintenance_plan": "",
-        "priority": "",
-        "ticket": "",
-        "email": "",
-        "teams": "",
-        "reflection": "",
-        "plan": "",
-    }
-    
-    def run_agent():
-        for s in graph.stream(initial_state, {"configurable": {"thread_id": thread_id}, "recursion_limit": 10}):
-            pass  # Process step result (you can log or handle it as needed)
-        
-        # Save the graph image
-        graph_file_path = "static/real_time_maintenance_graph.png"
-        graph.get_graph().draw_png(graph_file_path)
-    
-    agent_thread = threading.Thread(target=run_agent)
-    agent_thread.start()
-
-    return jsonify({"status": "Agent triggered", "thread_id": thread_id})
-
-@app.route('/status/<thread_id>')
-def get_status(thread_id):
-    # For simplicity, assume agent finishes within a fixed time (simulate progress)
-    time.sleep(5)  # Simulate waiting for agent completion
-    return jsonify({
-        "status": "completed",
-        "result": {
-            "plan": initial_state["plan"],
-            "current_status": initial_state["current_status"],
-            "analysis": initial_state["analysis"],
-            "prediction": initial_state["prediction"],
-            "maintenance_plan": initial_state["maintenance_plan"],
-            "priority": initial_state["priority"],
-            "ticket": initial_state["ticket"],
-            "email": initial_state["email"],
-            "teams": initial_state["teams"],
-            "reflection": initial_state["reflection"]
-        },
-        "graph_image": "static/real_time_maintenance_graph.png"
-    })
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    apps_config = load_apps_config()
+    return render_template('index.html', apps=apps_config)
+
+@app.route('/edit/<app_id>', methods=['GET', 'POST'])
+def edit_app(app_id):
+    apps_config = load_apps_config()
+    app_config = next((app for app in apps_config if app['app_id'] == app_id), None)
+    if not app_config:
+        return "App not found", 404
+
+    if request.method == 'POST':
+        app_config['url'] = request.form['url']
+        app_config['INCIDENT_ANALYSIS_PROMPT'] = request.form['INCIDENT_ANALYSIS_PROMPT']
+        app_config['ROOT_CAUSE_ANALYSIS_PROMPT'] = request.form['ROOT_CAUSE_ANALYSIS_PROMPT']
+        app_config['REFLECTION_PROMPT'] = request.form['REFLECTION_PROMPT']
+        app_config['email_address'] = request.form['email_address']
+        app_config['teams_webhook_url'] = request.form['teams_webhook_url']
+        app_config['P0'] = request.form['P0']
+        app_config['enabled'] = request.form['enabled']
+        app_config['description'] = request.form['description']
+
+        save_apps_config(apps_config)
+        return redirect(url_for('index'))
+
+    return render_template('edit.html', app=app_config)
+
+@app.route('/active_apps')
+def active_apps():
+    apps_config = load_apps_config()
+    active_apps = [app for app in apps_config if app['enabled'] == 'Yes']
+    return render_template('active_apps.html', apps=active_apps)
+
+@app.route('/run_agent/<app_id>')
+def run_agent(app_id):
+    thread = Thread(target=run_agent_for_app, args=(app_id,))
+    thread.start()
+    return f"Started agent for {app_id}", 200
 
 if __name__ == '__main__':
-     app.run(host='0.0.0.0', port=8898, debug=True, use_reloader=True)
+    monitor_thread = Thread(target=continuous_monitoring, daemon=True)
+    monitor_thread.start()
+    app.run(host='0.0.0.0', port=8899, debug=True, use_reloader=True)
+
+
+

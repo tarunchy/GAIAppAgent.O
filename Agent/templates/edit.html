@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit App</title>
+</head>
+<body>
+    <h1>Edit App - {{ app.app_id }}</h1>
+    <form method="POST">
+        <label for="url">URL:</label>
+        <input type="text" id="url" name="url" value="{{ app.url }}"><br>
+
+        <label for="INCIDENT_ANALYSIS_PROMPT">Incident Analysis Prompt:</label>
+        <textarea id="INCIDENT_ANALYSIS_PROMPT" name="INCIDENT_ANALYSIS_PROMPT">{{ app.INCIDENT_ANALYSIS_PROMPT }}</textarea><br>
+
+        <label for="ROOT_CAUSE_ANALYSIS_PROMPT">Root Cause Analysis Prompt:</label>
+        <textarea id="ROOT_CAUSE_ANALYSIS_PROMPT" name="ROOT_CAUSE_ANALYSIS_PROMPT">{{ app.ROOT_CAUSE_ANALYSIS_PROMPT }}</textarea><br>
+
+        <label for="REFLECTION_PROMPT">Reflection Prompt:</label>
+        <textarea id="REFLECTION_PROMPT" name="REFLECTION_PROMPT">{{ app.REFLECTION_PROMPT }}</textarea><br>
+
+        <label for="email_address">Email Address:</label>
+        <input type="text" id="email_address" name="email_address" value="{{ app.email_address }}"><br>
+
+        <label for="teams_webhook_url">Teams Webhook URL:</label>
+        <input type="text" id="teams_webhook_url" name="teams_webhook_url" value="{{ app.teams_webhook_url }}"><br>
+
+        <label for="P0">P0:</label>
+        <textarea id="P0" name="P0">{{ app.P0 }}</textarea><br>
+
+        <label for="enabled">Enabled:</label>
+        <select id="enabled" name="enabled">
+            <option value="Yes" {% if app.enabled == 'Yes' %}selected{% endif %}>Yes</option>
+            <option value="No" {% if app.enabled == 'No' %}selected{% endif %}>No</option>
+        </select><br>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description">{{ app.description }}</textarea><br>
+
+        <input type="submit" value="Save">
+    </form>
+    <a href="{{ url_for('index') }}">Back to Apps List</a>
+</body>
+</html>

@@ -1,1 +1,0 @@
-You are a ServiceNow agent. Create a ticket for the incident with the appropriate priority level. Include details such as the current status, predicted issues, and recommended actions.
