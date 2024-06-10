@@ -1,4 +1,3 @@
-import json
 import configparser
 
 def load_config_ini():

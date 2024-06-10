@@ -9,13 +9,23 @@ from utils.config_loader import load_config_ini
 
 # Load secrets.ini
 secrets_config = load_config_ini()
-secrets = secrets_config['settings']['secrets_config_path']
+secrets_path = secrets_config['settings']['secrets_config_path']
 
-servicenow_instance = secrets['secrets']['servicenow_instance']
-servicenow_username = secrets['secrets']['servicenow_username']
-servicenow_password = secrets['secrets']['servicenow_password']
-llama3_base_url = secrets['secrets']['llama3_base_url']
-email_api_url = secrets['secrets']['email_api_url']
+# Load the secrets.ini file
+def load_secrets_ini(path):
+    config = configparser.ConfigParser()
+    config.read(path)
+    return config
+
+secrets_config = load_secrets_ini(secrets_path)
+secrets = secrets_config['secrets']
+
+servicenow_instance = secrets['servicenow_instance']
+servicenow_username = secrets['servicenow_username']
+servicenow_password = secrets['servicenow_password']
+llama3_base_url = secrets['llama3_base_url']
+email_api_url = secrets['email_api_url']
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
