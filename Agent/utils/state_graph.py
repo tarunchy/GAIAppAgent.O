@@ -45,8 +45,8 @@ def run_agent_for_app(app_id):
 
     graph = builder.compile(checkpointer=memory)
 
-    graph_file_path = "smart_grid_graph.png"
-    graph.get_graph().draw_png(graph_file_path)
+    #graph_file_path = "smart_grid_graph.png"
+    #graph.get_graph().draw_png(graph_file_path)
 
     thread = {"configurable": {"thread_id": "1"}, "recursion_limit": 20}
     final_state = None
