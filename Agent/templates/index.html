@@ -39,52 +39,52 @@
 
     <!-- Add New App Modal -->
     <div id="add-app-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
-        <div class="bg-white p-6 rounded shadow-md w-full max-w-lg mx-4">
+        <div class="bg-white p-6 rounded shadow-md w-full max-w-lg mx-4 space-y-4">
             <h2 class="text-xl font-bold mb-4">Add New App</h2>
             <div id="add-app-form" class="space-y-4">
                 <div>
                     <label for="new_app_id" class="block text-sm font-medium text-gray-700">App ID:</label>
-                    <input type="text" id="new_app_id" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                    <input type="text" id="new_app_id" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" required>
                 </div>
 
                 <div>
                     <label for="new_url" class="block text-sm font-medium text-gray-700">URL:</label>
-                    <input type="text" id="new_url" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                    <input type="text" id="new_url" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" required>
                 </div>
 
                 <div>
                     <label for="new_INCIDENT_ANALYSIS_PROMPT" class="block text-sm font-medium text-gray-700">Incident Analysis Prompt:</label>
-                    <textarea id="new_INCIDENT_ANALYSIS_PROMPT" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
+                    <textarea id="new_INCIDENT_ANALYSIS_PROMPT" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" required></textarea>
                 </div>
 
                 <div>
                     <label for="new_ROOT_CAUSE_ANALYSIS_PROMPT" class="block text-sm font-medium text-gray-700">Root Cause Analysis Prompt:</label>
-                    <textarea id="new_ROOT_CAUSE_ANALYSIS_PROMPT" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
+                    <textarea id="new_ROOT_CAUSE_ANALYSIS_PROMPT" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" required></textarea>
                 </div>
 
                 <div>
                     <label for="new_REFLECTION_PROMPT" class="block text-sm font-medium text-gray-700">Reflection Prompt:</label>
-                    <textarea id="new_REFLECTION_PROMPT" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
+                    <textarea id="new_REFLECTION_PROMPT" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" required></textarea>
                 </div>
 
                 <div>
                     <label for="new_email_address" class="block text-sm font-medium text-gray-700">Email Address:</label>
-                    <input type="text" id="new_email_address" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                    <input type="text" id="new_email_address" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" required>
                 </div>
 
                 <div>
                     <label for="new_teams_webhook_url" class="block text-sm font-medium text-gray-700">Teams Webhook URL:</label>
-                    <input type="text" id="new_teams_webhook_url" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                    <input type="text" id="new_teams_webhook_url" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" required>
                 </div>
 
                 <div>
                     <label for="new_P0" class="block text-sm font-medium text-gray-700">P0:</label>
-                    <textarea id="new_P0" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
+                    <textarea id="new_P0" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" required></textarea>
                 </div>
 
                 <div>
                     <label for="new_enabled" class="block text-sm font-medium text-gray-700">Enabled:</label>
-                    <select id="new_enabled" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                    <select id="new_enabled" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" required>
                         <option value="Yes">Yes</option>
                         <option value="No">No</option>
                     </select>
@@ -92,7 +92,7 @@
 
                 <div>
                     <label for="new_description" class="block text-sm font-medium text-gray-700">Description:</label>
-                    <textarea id="new_description" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
+                    <textarea id="new_description" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" required></textarea>
                 </div>
 
                 <div class="flex justify-end">
@@ -130,21 +130,34 @@
                     description: $('#new_description').val()
                 };
 
-                $.ajax({
-                    url: "{{ url_for('add_app') }}",
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(newAppData),
-                    success: function(response) {
-                        alert('New app added successfully!');
-                        window.location.reload();
-                    },
-                    error: function(error) {
-                        alert('Error adding new app.');
+                // Check if all fields are filled
+                let allFieldsFilled = true;
+                for (const key in newAppData) {
+                    if (newAppData[key] === "") {
+                        allFieldsFilled = false;
+                        break;
                     }
-                });
+                }
 
-                $('#add-app-modal').addClass('hidden');
+                if (allFieldsFilled) {
+                    $.ajax({
+                        url: "{{ url_for('add_app') }}",
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(newAppData),
+                        success: function(response) {
+                            alert('New app added successfully!');
+                            window.location.reload();
+                        },
+                        error: function(error) {
+                            alert('Error adding new app.');
+                        }
+                    });
+
+                    $('#add-app-modal').addClass('hidden');
+                } else {
+                    alert('Please fill in all the fields.');
+                }
             });
 
             // Run Agent Button Functionality
@@ -155,7 +168,7 @@
                     url: '/run_agent/' + appId,
                     method: 'POST',
                     success: function(response) {
-                        //alert(response);
+                        alert(response.status);
                         button.next('.check-icon').removeClass('hidden');
                     },
                     error: function(xhr) {
