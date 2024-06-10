@@ -21,10 +21,6 @@
             font-size: 0.875rem;
             margin-top: 0.25rem;
         }
-        .agent-response-modal {
-            background: url('/static/images/agent_flow.png') no-repeat center center;
-            background-size: cover;
-        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
@@ -154,11 +150,6 @@
                 $('#add-app-modal').addClass('hidden');
             });
 
-            // Hide Agent Response Modal
-            $('#close-agent-response').on('click', function() {
-                $('#agent-response-modal').addClass('hidden');
-            });
-
             // Save New App
             $('#save-add-app').on('click', function() {
                 const newAppData = {
@@ -207,24 +198,26 @@
             // Run Agent Button Functionality
             $('.run-agent-button').on('click', function() {
                 var appId = $(this).data('app-id');
+                var button = $(this);
                 $.ajax({
                     url: '/run_agent/' + appId,
                     method: 'POST',
                     success: function(response) {
+                        //alert(response.status);
+                        console.log(response.status);
+                        button.next('.check-icon').removeClass('hidden');
                         $('#agent-response-content').text(response.status);
-                        $('#agent-response-modal').removeClass('hidden');
                     },
                     error: function(xhr) {
-                        $('#agent-response-content').text('Error starting agent: ' + xhr.responseText);
-                        $('#agent-response-modal').removeClass('hidden');
+                        console.log('Error starting agent: ' + xhr.responseText);
                     }
                 });
             });
 
             // Optionally, close the modal when clicking outside the modal content
             $('#add-app-modal, #agent-response-modal').on('click', function(event) {
-                if ($(event.target).is($('#add-app-modal')) || $(event.target).is($('#agent-response-modal'))) {
-                    $(this).addClass('hidden');
+                if ($(event.target).is($('#add-app-modal'))) {
+                    $('#add-app-modal').addClass('hidden');
                 }
             });
         });
