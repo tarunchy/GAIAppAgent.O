@@ -10,6 +10,13 @@
     <style>
         .modal {
             display: none;
+            position: fixed;
+            inset: 20%;
+            background-color: rgba(0, 0, 0, 0.75);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
         }
     </style>
 </head>
@@ -73,7 +80,7 @@
     </div>
 
     <!-- Popup Modal -->
-    <div id="popup-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 modal">
+    <div id="popup-modal" class="modal">
         <div class="bg-white p-6 rounded shadow-md w-2/3">
             <h2 class="text-xl font-bold mb-4" id="popup-title"></h2>
             <textarea id="popup-textarea" class="w-full h-64 p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
@@ -96,12 +103,8 @@
                 $('#popup-modal').show();
             });
 
-            $('#save-popup').on('click', function() {
+            $('#save-popup, #close-popup').on('click', function() {
                 currentTextarea.val($('#popup-textarea').val());
-                $('#popup-modal').hide();
-            });
-
-            $('#close-popup').on('click', function() {
                 $('#popup-modal').hide();
             });
         });

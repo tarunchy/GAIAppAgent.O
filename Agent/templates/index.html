@@ -6,8 +6,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.1/dist/tailwind.min.css">
     <script src="https://cdn.jsdelivr.net/npm/darkmode-js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
         .ai-monitoring-bg {
@@ -17,9 +15,15 @@
         }
         .modal {
             display: none;
+            position: fixed;
+            inset: 20%;
+            background-color: rgba(0, 0, 0, 0.75);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
         }
     </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/6POhu/6kk/aL6/5F9AB7m3II/3lRjEBmY5ojwN" crossorigin="anonymous"></script>
 </head>
 <body class="bg-gray-100 text-gray-900">
     <div class="container mx-auto p-6">
@@ -35,16 +39,14 @@
                 </div>
                 <div>
                     <button
-                        @click="agents['{{ app.app_id }}'] = true"
-                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none"
+                        class="run-agent-button bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none"
+                        data-app-id="{{ app.app_id }}"
                     >
                         Run Agent
                     </button>
-                    <template x-if="agents['{{ app.app_id }}']">
-                        <span class="ml-2 text-green-500">
-                            &#10003; <!-- Check icon -->
-                        </span>
-                    </template>
+                    <span class="ml-2 text-green-500 check-icon" style="display: none;">
+                        &#10003; <!-- Check icon -->
+                    </span>
                 </div>
             </li>
             {% endfor %}
@@ -54,7 +56,7 @@
     </div>
 
     <!-- Add New App Modal -->
-    <div id="add-app-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 modal">
+    <div id="add-app-modal" class="modal">
         <div class="bg-white p-6 rounded shadow-md w-2/3">
             <h2 class="text-xl font-bold mb-4">Add New App</h2>
             <form id="add-app-form" action="{{ url_for('add_app') }}" method="POST" class="space-y-4">
@@ -68,6 +70,49 @@
                     <textarea id="new_description" name="description" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
                 </div>
 
+                <div>
+                    <label for="new_url" class="block text-sm font-medium text-gray-700">URL:</label>
+                    <input type="text" id="new_url" name="url" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                </div>
+
+                <div>
+                    <label for="new_INCIDENT_ANALYSIS_PROMPT" class="block text-sm font-medium text-gray-700">Incident Analysis Prompt:</label>
+                    <textarea id="new_INCIDENT_ANALYSIS_PROMPT" name="INCIDENT_ANALYSIS_PROMPT" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
+                </div>
+
+                <div>
+                    <label for="new_ROOT_CAUSE_ANALYSIS_PROMPT" class="block text-sm font-medium text-gray-700">Root Cause Analysis Prompt:</label>
+                    <textarea id="new_ROOT_CAUSE_ANALYSIS_PROMPT" name="ROOT_CAUSE_ANALYSIS_PROMPT" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
+                </div>
+
+                <div>
+                    <label for="new_REFLECTION_PROMPT" class="block text-sm font-medium text-gray-700">Reflection Prompt:</label>
+                    <textarea id="new_REFLECTION_PROMPT" name="REFLECTION_PROMPT" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
+                </div>
+
+                <div>
+                    <label for="new_email_address" class="block text-sm font-medium text-gray-700">Email Address:</label>
+                    <input type="text" id="new_email_address" name="email_address" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                </div>
+
+                <div>
+                    <label for="new_teams_webhook_url" class="block text-sm font-medium text-gray-700">Teams Webhook URL:</label>
+                    <input type="text" id="new_teams_webhook_url" name="teams_webhook_url" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                </div>
+
+                <div>
+                    <label for="new_P0" class="block text-sm font-medium text-gray-700">P0:</label>
+                    <textarea id="new_P0" name="P0" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea>
+                </div>
+
+                <div>
+                    <label for="new_enabled" class="block text-sm font-medium text-gray-700">Enabled:</label>
+                    <select id="new_enabled" name="enabled" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
                 <div class="flex justify-end">
                     <button type="button" id="close-add-app" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 mr-2">Cancel</button>
                     <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">Save</button>
@@ -78,16 +123,35 @@
 
     <script>
         $(document).ready(function() {
+            // Show Add App Modal
             $('#add-app-button').on('click', function() {
                 $('#add-app-modal').show();
             });
 
+            // Hide Add App Modal
             $('#close-add-app').on('click', function() {
                 $('#add-app-modal').hide();
             });
 
+            // Hide Add App Modal on form submit
             $('#add-app-form').on('submit', function() {
                 $('#add-app-modal').hide();
+            });
+
+            // Run Agent Button Functionality
+            $('.run-agent-button').on('click', function() {
+                var appId = $(this).data('app-id');
+                $.ajax({
+                    url: '/run_agent/' + appId,
+                    method: 'GET',
+                    success: function(response) {
+                        alert(response);
+                        $(this).next('.check-icon').show();
+                    }.bind(this),
+                    error: function(xhr) {
+                        alert('Error starting agent: ' + xhr.responseText);
+                    }
+                });
             });
         });
     </script>
