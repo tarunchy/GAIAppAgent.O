@@ -69,7 +69,6 @@
     </div>
 
     <!-- Popup Modal -->
-    <!-- Popup Modal -->
     <div id="popup-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
         <div class="bg-white p-6 rounded shadow-md w-full max-w-lg mx-4">
             <h2 class="text-xl font-bold mb-4" id="popup-title"></h2>
@@ -81,29 +80,43 @@
         </div>
     </div>
 
-
     <script>
-       $(document).ready(function() {
-    let currentTextarea;
+        $(document).ready(function() {
+            // Cache jQuery selectors
+            const $popupModal = $('#popup-modal');
+            const $popupTitle = $('#popup-title');
+            const $popupTextarea = $('#popup-textarea');
+            const $savePopup = $('#save-popup');
+            const $closePopup = $('#close-popup');
+            
+            let currentTextarea;
 
-    $('textarea').on('click', function() {
-        currentTextarea = $(this);
-        const fieldLabel = $(this).prev('label').text();
-        $('#popup-title').text(fieldLabel);
-        $('#popup-textarea').val(currentTextarea.val());
-        $('#popup-modal').show();
-    });
+            $('textarea').on('click', function() {
+                currentTextarea = $(this);
+                const fieldLabel = currentTextarea.prev('label').text();
+                $popupTitle.text(fieldLabel);
+                $popupTextarea.val(currentTextarea.val());
+                $popupModal.removeClass('hidden');
+            });
 
-    $('#save-popup').on('click', function() {
-        currentTextarea.val($('#popup-textarea').val());
-        $('#popup-modal').hide();
-    });
+            $savePopup.on('click', function() {
+                if (currentTextarea) {
+                    currentTextarea.val($popupTextarea.val());
+                }
+                $popupModal.addClass('hidden');
+            });
 
-    $('#close-popup').on('click', function() {
-        $('#popup-modal').hide();
-    });
-});
+            $closePopup.on('click', function() {
+                $popupModal.addClass('hidden');
+            });
 
+            // Optionally, close the modal when clicking outside the modal content
+            $popupModal.on('click', function(event) {
+                if ($(event.target).is($popupModal)) {
+                    $popupModal.addClass('hidden');
+                }
+            });
+        });
     </script>
 </body>
 </html>
