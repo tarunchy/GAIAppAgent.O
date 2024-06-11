@@ -101,17 +101,17 @@
                 if (message.status === "in_progress") {
                     // Remove spinner and yellow background from other nodes
                     $('.node').not(nodeElement).each(function() {
-                        $(this).removeClass('bg-yellow-200').removeClass('bg-green-200').removeClass('bg-red-500').removeClass('text-white');
+                        $(this).removeClass('bg-yellow-200 bg-green-200 bg-red-500 text-white');
                         $(this).html($(this).data('originalContent'));
                     });
 
-                    nodeElement.addClass('bg-yellow-200').removeClass('bg-green-200').removeClass('bg-red-500').removeClass('text-white');
+                    nodeElement.addClass('bg-yellow-200').removeClass('bg-green-200 bg-red-500 text-white');
                     nodeElement.html(`<div class="spinner"></div>`);
                 } else if (message.status === "completed") {
                     nodeElement.removeClass('bg-yellow-200').addClass('bg-green-200');
                     nodeElement.html(nodeElement.data('originalContent'));
                 } else if (message.status === "error") {
-                    nodeElement.removeClass('bg-yellow-200').addClass('bg-red-500').addClass('text-white');
+                    nodeElement.removeClass('bg-yellow-200').addClass('bg-red-500 text-white');
                     nodeElement.html(nodeElement.data('originalContent'));
                 }
             };
