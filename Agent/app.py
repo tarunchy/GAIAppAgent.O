@@ -1,11 +1,13 @@
 import logging
 import time
 import queue
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
 from threading import Thread
 from utils.config_loader import load_apps_config, save_apps_config
 from utils.state_graph import run_agent_for_app, continuous_monitoring
+from ws.state_graph_ws import run_agent_for_app_ws  # Import the WS state graph
+from ws.websocket_handler import start_websocket_server  # Import the websocket server function
 
 # Load environment variables
 load_dotenv()
@@ -17,9 +19,12 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Initialize a queue and a set to track queued tasks
+# Initialize queues and sets to track queued tasks
 task_queue = queue.Queue()
 queued_apps = set()
+
+ws_task_queue = queue.Queue()
+ws_queued_apps = set()
 
 def worker():
     while True:
@@ -28,12 +33,23 @@ def worker():
             break
         run_agent_for_app(app_id)
         task_queue.task_done()
-        # Remove app_id from the set after processing
         queued_apps.remove(app_id)
 
-# Start the worker thread
+def ws_worker():
+    while True:
+        app_id = ws_task_queue.get()
+        if app_id is None:
+            break
+        run_agent_for_app_ws(app_id)
+        ws_task_queue.task_done()
+        ws_queued_apps.remove(app_id)
+
+# Start the worker threads
 worker_thread = Thread(target=worker, daemon=True)
 worker_thread.start()
+
+ws_worker_thread = Thread(target=ws_worker, daemon=True)
+ws_worker_thread.start()
 
 @app.route('/')
 def index():
@@ -99,7 +115,25 @@ def run_agent(app_id):
     task_queue.put(app_id)
     return jsonify({'status': f'Queued agent for {app_id}'})
 
+@app.route('/run_agent_ws/<app_id>', methods=['POST'])
+def run_agent_ws(app_id):
+    if app_id in ws_queued_apps:
+        return jsonify({'status': f'Agent for {app_id} is already in queue'})
+    
+    ws_queued_apps.add(app_id)
+    ws_task_queue.put(app_id)
+    return jsonify({'status': f'Queued agent for {app_id} with WebSocket support'})
+
+@app.route('/websocket_ui')
+def websocket_ui():
+    apps_config = load_apps_config()
+    return render_template('websocket_ui.html', apps=apps_config)
+
 if __name__ == '__main__':
     monitor_thread = Thread(target=continuous_monitoring, daemon=True)
     monitor_thread.start()
+
+    websocket_thread = Thread(target=start_websocket_server, daemon=True)
+    websocket_thread.start()
+
     app.run(host='0.0.0.0', port=8899, debug=True, use_reloader=True)
