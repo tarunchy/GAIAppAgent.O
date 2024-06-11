@@ -66,10 +66,7 @@
                 </div>
                 <div class="flex items-center space-x-2">
                     <a href="{{ url_for('edit_app', app_id=app.app_id) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Edit</a>
-                    <button
-                        class="run-agent-button bg-blue-500 text-white px -4 py-2 rounded hover:bg-blue-700 focus:outline-none"
-                        data-app-id="{{ app.app_id }}"
-                    >
+                    <button class="run-agent-button bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none" data-app-id="{{ app.app_id }}">
                         Run Agent
                     </button>
                     <span class="ml-2 text-green-500 check-icon hidden">
@@ -104,24 +101,6 @@
             const progressModal = $('#progress-modal');
             const closeProgressModalButton = $('#close-progress-modal');
 
-            const ws = new WebSocket('ws://dlyog03:6789');
-
-            ws.onmessage = function(event) {
-                const message = JSON.parse(event.data);
-                const nodeElement = $('#' + message.node);
-
-                if (message.status === "in_progress") {
-                    gsap.to(nodeElement, {backgroundColor: 'yellow', scale: 1.1, duration: 0.5});
-                    nodeElement.removeClass('completed error');
-                } else if (message.status === "completed") {
-                    gsap.to(nodeElement, {backgroundColor: 'lightgreen', scale: 1.2, duration: 0.5});
-                    nodeElement.removeClass('in-progress error');
-                } else if (message.status === "error") {
-                    gsap.to(nodeElement, {backgroundColor: 'red', color: 'white', scale: 1, duration: 0.5});
-                    nodeElement.removeClass('in-progress completed');
-                }
-            };
-
             function resetProgress() {
                 $('.node').removeClass('in-progress completed error').css({'backgroundColor': '', 'color': '', 'transform': ''});
             }
@@ -129,6 +108,25 @@
             function startAgent(appId) {
                 resetProgress();
                 progressModal.removeClass('hidden');
+
+                const ws = new WebSocket('ws://dlyog03:6789');
+
+                ws.onmessage = function(event) {
+                    const message = JSON.parse(event.data);
+                    const nodeElement = $('#' + message.node);
+
+                    if (message.status === "in_progress") {
+                        gsap.to(nodeElement, {backgroundColor: 'yellow', scale: 1.1, duration: 0.5});
+                        nodeElement.removeClass('completed error');
+                    } else if (message.status === "completed") {
+                        gsap.to(nodeElement, {backgroundColor: 'lightgreen', scale: 1.2, duration: 0.5});
+                        nodeElement.removeClass('in-progress error');
+                    } else if (message.status === "error") {
+                        gsap.to(nodeElement, {backgroundColor: 'red', color: 'white', scale: 1, duration: 0.5});
+                        nodeElement.removeClass('in-progress completed');
+                    }
+                };
+
                 $.post(`/run_agent_ws/${appId}`, function(response) {
                     alert(response.status);
                 }).fail(function(error) {
