@@ -15,7 +15,7 @@ async def progress_update(websocket, path):
 
 async def notify_clients(message):
     if connected_clients:
-        await asyncio.wait([client.send(message) for client in connected_clients])
+        await asyncio.gather(*[client.send(message) for client in connected_clients])
 
 def send_progress_update(node_name, status):
     message = json.dumps({"node": node_name, "status": status})
