@@ -7,6 +7,21 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.1/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
+    <style>
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
     <div class="container mx-auto p-6">
@@ -64,14 +79,15 @@
                 const nodeElement = $('#' + message.node);
 
                 if (message.status === "in_progress") {
-                    gsap.to(nodeElement, {backgroundColor: 'yellow', scale: 1.1, duration: 0.5});
-                    nodeElement.removeClass('bg-green-200 bg-red-500 text-white');
+                    $('.node').not(nodeElement).removeClass('bg-yellow-200').removeClass('bg-green-200').removeClass('bg-red-500').removeClass('text-white');
+                    nodeElement.addClass('bg-yellow-200').removeClass('bg-green-200').removeClass('bg-red-500').removeClass('text-white');
+                    nodeElement.html(`<div class="spinner"></div>`);
                 } else if (message.status === "completed") {
-                    gsap.to(nodeElement, {backgroundColor: 'lightgreen', scale: 1.2, duration: 0.5});
-                    nodeElement.removeClass('bg-yellow-200 bg-red-500 text-white');
+                    nodeElement.removeClass('bg-yellow-200').addClass('bg-green-200');
+                    nodeElement.html(nodeElement.data('originalContent'));
                 } else if (message.status === "error") {
-                    gsap.to(nodeElement, {backgroundColor: 'red', color: 'white', scale: 1, duration: 0.5});
-                    nodeElement.removeClass('bg-yellow-200 bg-green-200');
+                    nodeElement.removeClass('bg-yellow-200').addClass('bg-red-500').addClass('text-white');
+                    nodeElement.html(nodeElement.data('originalContent'));
                 }
             };
 
@@ -88,6 +104,11 @@
                     console.error('Error starting agent:', error);
                 });
             }
+
+            $('.node').each(function() {
+                const nodeElement = $(this);
+                nodeElement.data('originalContent', nodeElement.html());
+            });
 
             $('.run-agent-button').on('click', function() {
                 const appId = $(this).data('app-id');
