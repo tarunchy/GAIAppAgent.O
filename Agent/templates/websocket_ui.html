@@ -15,11 +15,25 @@
             width: 24px;
             height: 24px;
             animation: spin 1s linear infinite;
+            margin: auto;
         }
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        .arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+        }
+
+        .arrow::before {
+            content: '→';
+            font-size: 24px;
+            color: #3498db;
         }
     </style>
 </head>
@@ -54,13 +68,19 @@
     <div id="progress-modal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div class="bg-white p-6 rounded-lg w-11/12 max-w-lg text-center">
             <h2 class="text-2xl font-bold mb-4">Agent Progress</h2>
-            <div id="progress-container" class="flex flex-wrap justify-center space-x-2">
+            <div id="progress-container" class="flex flex-wrap justify-center items-center space-x-2">
                 <div id="incident_data_capture" class="node p-5 m-2 border-2 border-gray-300 rounded text-center w-36 transition-transform duration-300">Incident Data Capture</div>
+                <div class="arrow"></div>
                 <div id="root_cause_analysis" class="node p-5 m-2 border-2 border-gray-300 rounded text-center w-36 transition-transform duration-300">Root Cause Analysis</div>
+                <div class="arrow"></div>
                 <div id="reflect" class="node p-5 m-2 border-2 border-gray-300 rounded text-center w-36 transition-transform duration-300">Reflect</div>
+                <div class="arrow"></div>
                 <div id="create_service_now_ticket" class="node p-5 m-2 border-2 border-gray-300 rounded text-center w-36 transition-transform duration-300">Create ServiceNow Ticket</div>
+                <div class="arrow"></div>
                 <div id="send_teams_notification" class="node p-5 m-2 border-2 border-gray-300 rounded text-center w-36 transition-transform duration-300">Send Teams Notification</div>
+                <div class="arrow"></div>
                 <div id="create_email_subject_body" class="node p-5 m-2 border-2 border-gray-300 rounded text-center w-36 transition-transform duration-300">Create Email Subject & Body</div>
+                <div class="arrow"></div>
                 <div id="send_email_notification" class="node p-5 m-2 border-2 border-gray-300 rounded text-center w-36 transition-transform duration-300">Send Email Notification</div>
             </div>
             <button id="close-progress-modal" class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">Close</button>
