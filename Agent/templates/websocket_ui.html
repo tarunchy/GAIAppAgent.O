@@ -106,7 +106,7 @@
             const progressModal = $('#progress-modal');
             const closeProgressModalButton = $('#close-progress-modal');
 
-            const ws = new WebSocket('wss://dlyog03:6789/ws');
+            const ws = new WebSocket('ws://dlyog03:6789');
 
             ws.onmessage = function(event) {
                 const message = JSON.parse(event.data);
