@@ -1,5 +1,6 @@
 # ws/websocket_handler.py
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
+from flask import request
 import json
 
 socketio = SocketIO()
