@@ -1,5 +1,6 @@
 # ws/websocket_handler.py
-from flask_socketio import SocketIO, send, emit
+from flask_socketio import SocketIO, send, emit, join_room, leave_room
+import json
 
 socketio = SocketIO()
 
@@ -25,3 +26,9 @@ def notify_clients(message):
 def send_progress_update(node_name, status):
     message = {"node": node_name, "status": status}
     notify_clients(message)
+
+def node_wrapper(node_func, node_name, state, app_config):
+    send_progress_update(node_name, "in_progress")
+    result = node_func(state, app_config)
+    send_progress_update(node_name, "completed")
+    return result
