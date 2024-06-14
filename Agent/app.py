@@ -130,6 +130,19 @@ def websocket_ui():
     return render_template('websocket_ui.html', apps=apps_config)
 
 if __name__ == '__main__':
+    # Ensure previous instances are killed
+    import os
+    import signal
+
+    def kill_previous_instance(port):
+        import psutil
+        for proc in psutil.process_iter(['pid', 'name']):
+            for conn in proc.connections(kind='inet'):
+                if conn.laddr.port == port:
+                    os.kill(proc.info['pid'], signal.SIGKILL)
+
+    kill_previous_instance(6789)
+
     monitor_thread = Thread(target=continuous_monitoring, daemon=True)
     monitor_thread.start()
 
