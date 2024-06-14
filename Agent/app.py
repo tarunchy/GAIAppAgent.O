@@ -8,6 +8,9 @@ from utils.config_loader import load_apps_config, save_apps_config
 from utils.state_graph import run_agent_for_app, continuous_monitoring
 from ws.state_graph_ws import run_agent_for_app_ws  # Import the WS state graph
 from ws.websocket_handler import start_websocket_server  # Import the websocket server function
+import psutil
+import os
+import signal
 
 # Load environment variables
 load_dotenv()
@@ -129,18 +132,17 @@ def websocket_ui():
     apps_config = load_apps_config()
     return render_template('websocket_ui.html', apps=apps_config)
 
-if __name__ == '__main__':
-    # Ensure previous instances are killed
-    import os
-    import signal
-
-    def kill_previous_instance(port):
-        import psutil
-        for proc in psutil.process_iter(['pid', 'name']):
+def kill_previous_instance(port):
+    for proc in psutil.process_iter(['pid', 'name']):
+        try:
             for conn in proc.connections(kind='inet'):
                 if conn.laddr.port == port:
                     os.kill(proc.info['pid'], signal.SIGKILL)
+        except (psutil.AccessDenied, psutil.NoSuchProcess):
+            # Skip processes we don't have permission to access or that no longer exist
+            continue
 
+if __name__ == '__main__':
     kill_previous_instance(6789)
 
     monitor_thread = Thread(target=continuous_monitoring, daemon=True)
