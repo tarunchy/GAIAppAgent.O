@@ -7,14 +7,15 @@ from threading import Thread
 from utils.config_loader import load_apps_config, save_apps_config
 from utils.state_graph import run_agent_for_app, continuous_monitoring
 from ws.state_graph_ws import run_agent_for_app_ws  # Import the WS state graph
-from ws.websocket_handler import socketio, node_wrapper  # Import the websocket server function
+from ws.websocket_handler import socketio, node_wrapper  # Import the websocket server and node wrapper function
+import eventlet
 
 # Load environment variables
 load_dotenv()
 
 # Initialize Flask application
 app = Flask(__name__)
-socketio.init_app(app)
+socketio.init_app(app, async_mode='eventlet')
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -32,7 +33,9 @@ def worker():
         app_id = task_queue.get()
         if app_id is None:
             break
-        # Wrap the agent function call with node_wrapper
+        # Assuming state and app_config are loaded here based on app_id
+        state = {}  # Replace with actual state loading logic
+        app_config = {}  # Replace with actual app_config loading logic
         node_wrapper(run_agent_for_app, app_id, state, app_config)
         task_queue.task_done()
         queued_apps.remove(app_id)
@@ -42,7 +45,9 @@ def ws_worker():
         app_id = ws_task_queue.get()
         if app_id is None:
             break
-        # Wrap the agent function call with node_wrapper
+        # Assuming state and app_config are loaded here based on app_id
+        state = {}  # Replace with actual state loading logic
+        app_config = {}  # Replace with actual app_config loading logic
         node_wrapper(run_agent_for_app_ws, app_id, state, app_config)
         ws_task_queue.task_done()
         ws_queued_apps.remove(app_id)
@@ -136,5 +141,4 @@ if __name__ == '__main__':
     monitor_thread = Thread(target=continuous_monitoring, daemon=True)
     monitor_thread.start()
 
-    socketio.run(app, host='0.0.0.0', port=8899, debug=True, allow_unsafe_werkzeug=True)
-
+    socketio.run(app, host='0.0.0.0', port=8899, debug=True)
