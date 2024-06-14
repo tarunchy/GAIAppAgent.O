@@ -109,8 +109,8 @@
                     nodeElement.html(`<div class="spinner"></div>`);
                 } else if (message.status === "completed") {
                     nodeElement.removeClass('bg-yellow-200');
-                    nodeElement.addClass('bg-green-200');
                     nodeElement.html(nodeElement.data('originalContent'));
+                    nodeElement.addClass('bg-green-200');
                 } else if (message.status === "error") {
                     nodeElement.removeClass('bg-yellow-200').addClass('bg-red-500 text-white');
                     nodeElement.html(nodeElement.data('originalContent'));

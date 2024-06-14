@@ -6,8 +6,11 @@ from dotenv import load_dotenv
 from threading import Thread
 from utils.config_loader import load_apps_config, save_apps_config
 from utils.state_graph import run_agent_for_app, continuous_monitoring
-from ws.state_graph_ws import run_agent_for_app_ws  # Import the WS state graph
-from ws.websocket_handler import start_websocket_server  # Import the websocket server function
+from ws.state_graph_ws import run_agent_for_app_ws
+from ws.websocket_handler import start_websocket_server, stop_websocket_server
+import asyncio
+import signal
+import sys
 
 # Load environment variables
 load_dotenv()
@@ -133,7 +136,16 @@ if __name__ == '__main__':
     monitor_thread = Thread(target=continuous_monitoring, daemon=True)
     monitor_thread.start()
 
-    websocket_thread = Thread(target=start_websocket_server, daemon=True)
-    websocket_thread.start()
+    loop = asyncio.get_event_loop()
+    websocket_server = loop.run_until_complete(start_websocket_server())
 
-    app.run(host='0.0.0.0', port=8899, debug=True, use_reloader=True)
+    def shutdown_server(signal, frame):
+        asyncio.run_coroutine_threadsafe(stop_websocket_server(websocket_server), loop)
+        loop.stop()
+        sys.exit(0)
+
+    signal.signal(signal.SIGINT, shutdown_server)
+    signal.signal(signal.SIGTERM, shutdown_server)
+
+    app.run(host='0.0.0.0', port=8899, debug=True, use_reloader=False)
+    loop.run_forever()
