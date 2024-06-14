@@ -29,19 +29,8 @@ def node_wrapper(node_func, node_name, state, app_config):
     return result
 
 async def start_websocket_server():
-    server = None
-    port = 6789
-    while not server:
-        try:
-            server = await websockets.serve(progress_update, "0.0.0.0", port)
-            logging.info(f"WebSocket server started on port {port}")
-        except OSError as e:
-            if e.errno == 98:
-                logging.warning(f"Port {port} already in use. Trying next port.")
-                port += 1
-            else:
-                raise
-    return server
+    server = await websockets.serve(progress_update, "0.0.0.0", 6789)
+    await server.wait_closed()
 
 async def stop_websocket_server(server):
     logging.info("Stopping WebSocket server...")
