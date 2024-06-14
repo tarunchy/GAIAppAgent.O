@@ -1,5 +1,4 @@
-# ws/websocket_handler.py
-from flask_socketio import SocketIO, send, emit, join_room, leave_room
+from flask_socketio import SocketIO
 from flask import request
 import json
 
@@ -22,7 +21,7 @@ def handle_message(message):
     print(f"Received message: {message}")
 
 def notify_clients(message):
-    emit('message', message, broadcast=True)
+    socketio.emit('message', message, broadcast=True)
 
 def send_progress_update(node_name, status):
     message = {"node": node_name, "status": status}

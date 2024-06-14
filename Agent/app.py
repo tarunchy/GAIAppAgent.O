@@ -6,9 +6,11 @@ from dotenv import load_dotenv
 from threading import Thread
 from utils.config_loader import load_apps_config, save_apps_config
 from utils.state_graph import run_agent_for_app, continuous_monitoring
-from ws.state_graph_ws import run_agent_for_app_ws  # Import the WS state graph
-from ws.websocket_handler import socketio, node_wrapper  # Import the websocket server and node wrapper function
+from ws.state_graph_ws import run_agent_for_app_ws
+from ws.websocket_handler import socketio, node_wrapper
 import eventlet
+
+eventlet.monkey_patch()
 
 # Load environment variables
 load_dotenv()
@@ -33,7 +35,6 @@ def worker():
         app_id = task_queue.get()
         if app_id is None:
             break
-        # Assuming state and app_config are loaded here based on app_id
         state = {}  # Replace with actual state loading logic
         app_config = {}  # Replace with actual app_config loading logic
         node_wrapper(run_agent_for_app, app_id, state, app_config)
@@ -45,7 +46,6 @@ def ws_worker():
         app_id = ws_task_queue.get()
         if app_id is None:
             break
-        # Assuming state and app_config are loaded here based on app_id
         state = {}  # Replace with actual state loading logic
         app_config = {}  # Replace with actual app_config loading logic
         node_wrapper(run_agent_for_app_ws, app_id, state, app_config)
