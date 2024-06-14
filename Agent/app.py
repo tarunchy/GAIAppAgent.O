@@ -136,4 +136,5 @@ if __name__ == '__main__':
     monitor_thread = Thread(target=continuous_monitoring, daemon=True)
     monitor_thread.start()
 
-    socketio.run(app, host='0.0.0.0', port=8899, debug=True)
+    socketio.run(app, host='0.0.0.0', port=8899, debug=True, allow_unsafe_werkzeug=True)
+
