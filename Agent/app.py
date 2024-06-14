@@ -7,17 +7,14 @@ from threading import Thread
 from utils.config_loader import load_apps_config, save_apps_config
 from utils.state_graph import run_agent_for_app, continuous_monitoring
 from ws.state_graph_ws import run_agent_for_app_ws  # Import the WS state graph
-from ws.websocket_handler import start_websocket_server, stop_websocket_server  # Import the websocket server functions
-import asyncio
-import signal
-import sys
-
+from ws.websocket_handler import socketio, send_progress_update  # Import the websocket server function
 
 # Load environment variables
 load_dotenv()
 
 # Initialize Flask application
 app = Flask(__name__)
+socketio.init_app(app)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -137,25 +134,4 @@ if __name__ == '__main__':
     monitor_thread = Thread(target=continuous_monitoring, daemon=True)
     monitor_thread.start()
 
-    # Function to start the Flask app
-    def start_flask_app():
-        app.run(host='0.0.0.0', port=8899, debug=True, use_reloader=False)
-
-    # Start the Flask app in a separate thread
-    flask_thread = Thread(target=start_flask_app, daemon=True)
-    flask_thread.start()
-
-    # Start the WebSocket server in the main thread
-    loop = asyncio.get_event_loop()
-    websocket_server = loop.run_until_complete(start_websocket_server())
-
-    def shutdown_server(signal, frame):
-        asyncio.run_coroutine_threadsafe(stop_websocket_server(websocket_server), loop)
-        loop.stop()
-        sys.exit(0)
-
-    signal.signal(signal.SIGINT, shutdown_server)
-    signal.signal(signal.SIGTERM, shutdown_server)
-
-    loop.run_forever()
-
+    socketio.run(app, host='0.0.0.0', port=8899, debug=True)
