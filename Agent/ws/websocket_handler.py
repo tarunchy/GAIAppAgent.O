@@ -1,34 +1,35 @@
-from flask_socketio import SocketIO
-from flask import request
+# ws/websocket_handler.py
+import asyncio
+import websockets
 import json
-
-socketio = SocketIO()
 
 connected_clients = set()
 
-@socketio.on('connect')
-def handle_connect():
-    connected_clients.add(request.sid)
-    print(f"Client connected: {request.sid}")
+async def progress_update(websocket, path):
+    connected_clients.add(websocket)
+    try:
+        async for message in websocket:
+            pass
+    finally:
+        connected_clients.remove(websocket)
 
-@socketio.on('disconnect')
-def handle_disconnect():
-    connected_clients.remove(request.sid)
-    print(f"Client disconnected: {request.sid}")
-
-@socketio.on('message')
-def handle_message(message):
-    print(f"Received message: {message}")
-
-def notify_clients(message):
-    socketio.emit('message', message, broadcast=True)
+async def notify_clients(message):
+    if connected_clients:
+        await asyncio.gather(*[client.send(message) for client in connected_clients])
 
 def send_progress_update(node_name, status):
-    message = {"node": node_name, "status": status}
-    notify_clients(message)
+    message = json.dumps({"node": node_name, "status": status})
+    asyncio.run(notify_clients(message))
 
 def node_wrapper(node_func, node_name, state, app_config):
     send_progress_update(node_name, "in_progress")
     result = node_func(state, app_config)
     send_progress_update(node_name, "completed")
     return result
+
+def start_websocket_server():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    start_server = websockets.serve(progress_update, "0.0.0.0", 6789)
+    loop.run_until_complete(start_server)
+    loop.run_forever()
