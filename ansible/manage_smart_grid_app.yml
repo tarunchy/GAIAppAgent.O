@@ -1,0 +1,37 @@
+---
+- name: Manage SmartGridMockApp
+  hosts: all
+  vars:
+    app_dir: /home/dlyog/ted/omniagent/SmartGridMockApp
+  tasks:
+    - name: Stop the application if action is stop
+      when: action == "stop"
+      command: "{{ app_dir }}/stop.sh"
+      ignore_errors: yes
+      register: stop_output
+
+    - name: Check if the application is running
+      when: action == "start"
+      shell: "ps -ef | grep '[p]ython {{ app_dir }}/app.py'"
+      ignore_errors: yes
+      register: app_status
+
+    - name: Stop the application if it is running
+      when: action == "start" and app_status.stdout != ""
+      command: "{{ app_dir }}/stop.sh"
+      register: stop_output
+
+    - name: Start the application
+      when: action == "start"
+      command: "{{ app_dir }}/start.sh"
+      register: start_output
+
+    - name: Display stop output
+      when: action == "stop" or (action == "start" and stop_output is defined)
+      debug:
+        msg: "{{ stop_output.stdout }}"
+
+    - name: Display start output
+      when: action == "start"
+      debug:
+        msg: "{{ start_output.stdout }}"
