@@ -3,6 +3,7 @@
   hosts: all
   vars:
     app_dir: /home/dlyog/ted/omniagent/SmartGridMockApp
+    app_action: ""
   tasks:
     - name: Check if the application is running
       shell: "ps -ef | grep '[p]ython {{ app_dir }}/app.py'"
@@ -11,29 +12,29 @@
 
     - name: Set application running fact
       set_fact:
-        app_running: "{{ app_status.stdout != '' }}"
+        app_running: "{{ app_status.rc == 0 }}"
 
-    - name: Stop the application if it is running and action is stop
-      when: action == "stop" and app_running
+    - name: Stop the application if it is running and app_action is stop
+      when: app_action == "stop" and app_running
       command: "{{ app_dir }}/stop.sh"
       register: stop_output
 
-    - name: Stop the application if it is running and action is start
-      when: action == "start" and app_running
+    - name: Stop the application if it is running and app_action is start
+      when: app_action == "start" and app_running
       command: "{{ app_dir }}/stop.sh"
       register: stop_output
 
-    - name: Start the application if action is start
-      when: action == "start"
+    - name: Start the application if app_action is start
+      when: app_action == "start"
       command: "{{ app_dir }}/start.sh"
       register: start_output
 
     - name: Display stop output
-      when: action == "stop" and app_running or (action == "start" and app_running)
+      when: (app_action == "stop" and app_running) or (app_action == "start" and app_running)
       debug:
         msg: "{{ stop_output.stdout | default('No stop output') }}"
 
     - name: Display start output
-      when: action == "start"
+      when: app_action == "start"
       debug:
         msg: "{{ start_output.stdout | default('No start output') }}"
