@@ -9,7 +9,7 @@ from utils.agent_functions import (
     AgentState,
     analysis_node, root_cause_node, reflection_node, create_service_now_ticket,
     send_teams_notification, create_email_subject_body, send_email_notification,
-    should_continue
+    should_continue,trigger_awx_job, incident_data_capture_next_node
 )
 from ws.websocket_handler import node_wrapper  # Import the wrapper
 
@@ -28,6 +28,7 @@ def run_agent_for_app_ws(app_id):
     builder = StateGraph(AgentState)
 
     builder.add_node("incident_data_capture", lambda state: node_wrapper(analysis_node, "incident_data_capture", state, app_config))
+    builder.add_node("trigger_awx_job", lambda state: node_wrapper(trigger_awx_job, "trigger_awx_job", state, app_config))
     builder.add_node("root_cause_analysis", lambda state: node_wrapper(root_cause_node, "root_cause_analysis", state, app_config))
     builder.add_node("reflect", lambda state: node_wrapper(reflection_node, "reflect", state, app_config))
     builder.add_node("create_service_now_ticket", lambda state: node_wrapper(create_service_now_ticket, "create_service_now_ticket", state, app_config))
@@ -37,9 +38,11 @@ def run_agent_for_app_ws(app_id):
 
     builder.set_entry_point("incident_data_capture")
 
-    builder.add_edge("incident_data_capture", "root_cause_analysis")
+    
+    builder.add_conditional_edges("incident_data_capture", incident_data_capture_next_node)
     builder.add_conditional_edges("root_cause_analysis", should_continue)
     builder.add_edge("reflect", "root_cause_analysis")
+    builder.add_edge("trigger_awx_job", "create_service_now_ticket")
     builder.add_edge("create_service_now_ticket", "send_teams_notification")
     builder.add_edge("send_teams_notification", "create_email_subject_body")
     builder.add_edge("create_email_subject_body", "send_email_notification")

@@ -28,6 +28,7 @@ servicenow_username = secrets['servicenow_username']
 servicenow_password = secrets['servicenow_password']
 llama3_base_url = secrets['llama3_base_url']
 email_api_url = secrets['email_api_url']
+awx_api_token = secrets['awx_api_token']
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -99,16 +100,13 @@ def analysis_node(state: AgentState, app_config):
     logger.info("Starting analysis_node")
     data = fetch_smart_grid_data(app_config['url'])
     if not data:
-        incident_type = "P0"
         return {
-            "incident_type": incident_type,
-            "root_cause": app_config['P0'],
-            "resolution": app_config['P0'],
-            "data": app_config['P0'],
-            "incident_id": state.get("incident_id", str(uuid.uuid4()))
+            "llm_response": app_config['P0'],
+            "short_description": app_config['P0'],
+            "incident_category": 'P0-Outage',
+            "data": app_config['P0']
+            
         }
-
-    event_data = data_to_csv(data)
 
     response = generate_response([
         {"role": "system", "content": app_config['INCIDENT_ANALYSIS_PROMPT']},
@@ -187,7 +185,6 @@ def create_service_now_ticket(state: AgentState, app_config):
     }
     data = {
         "short_description": state['short_description'],
-        "priority": state['incident_type'],
         "impact": impact,
         "urgency": urgency,
         "category": "incident",
@@ -199,9 +196,6 @@ def create_service_now_ticket(state: AgentState, app_config):
         incident_sys_id = response.json()["result"]["sys_id"]
         incident_url = f"{servicenow_instance}/nav_to.do?uri=incident.do?sys_id={incident_sys_id}"
         logger.info(f"Incident created successfully: {incident_sys_id}")
-
-        content = state.get('content', []).copy()
-        content.append("ServiceNow ticket created successfully")
 
         return {
             "INC_NO": incident_sys_id,
@@ -219,13 +213,24 @@ def send_teams_notification(state: AgentState, app_config):
 
     incident_url = state["incident_url"]
     logger.info(f"incident_url in send_teams_notification: {incident_url}")
+
+    incident_impact_urgency = {
+        "P0-Emergency": ("1", "1"),
+        "P1-Fault": ("2", "2"),
+        "P2-Severe": ("3", "3"),
+        "P3-Peak": ("4", "4"),
+        "P4-Low": ("5", "5"),
+    }
+
+    impact, urgency = incident_impact_urgency.get(state['incident_category'], ("3", "3"))
+
     message = {
         "@type": "MessageCard",
         "@context": "https://schema.org/extensions",
         "summary": "ServiceNow Incident Created",
         "sections": [{
             "activityTitle": "New ServiceNow Incident Created",
-            "activitySubtitle": f"Priority: {state['incident_type']}, Impact: 3, Urgency: 3",
+            "activitySubtitle": f"Priority: {state['incident_type']}, Impact: {impact}, Urgency: {urgency}",
             "activityImage": "https://www.servicenow.com/etc.clientlibs/servicenow/clientlibs/clientlib-base/resources/images/brand/logo-full-color.svg",
             "facts": [
                 {"name": "Incident Category", "value": state['incident_category']},
@@ -319,3 +324,58 @@ def should_continue(state):
     if state["revision_number"] >= state["max_revisions"]:
         return "create_service_now_ticket"
     return "reflect"
+
+def incident_data_capture_next_node(state):
+    logger.info(f"Checking if should continue: revision_number={state['revision_number']}, max_revisions={state['max_revisions']}")
+    if state["incident_category"] >= 'P0-Outage':
+        return "trigger_awx_job"
+    return "root_cause_analysis"
+
+def trigger_awx_job(state, app_config):
+    try:
+        # Extract details from config
+        awx_url = app_config['awx_url'] 
+        # Hardcode the app_action as "start"
+        app_action = "start"
+        
+        # Headers
+        headers = {
+            "Authorization": f"Bearer {awx_api_token}",
+            "Content-Type": "application/json"
+        }
+        
+        # Payload
+        payload = {
+            "extra_vars": {
+                "app_action": app_action
+            }
+        }
+        
+        # Make the request
+        response = httpx.post(awx_url, headers=headers, json=payload)
+        response.raise_for_status()  # Raise an exception for HTTP errors
+
+        # Check the response
+        if response.status_code == 201:
+            
+            return {
+                "incident_category": state['incident_category'],
+                "short_description": state['short_description'],
+                "llm_response": "App outage Observed. Self-Healing launched successfully with AWX. App should be up soon. However please do an RCA"
+            }
+        else:
+            logger.error(f"Failed to launch job. Status code: {response.status_code}, Response: {response.text}")
+           
+            return {
+                "incident_category": state['incident_category'],
+                "short_description": state['short_description'],
+                "llm_response": "App outage Observed. Self-Healing Failed with AWX"
+            }
+
+    except Exception as e:
+        logger.error(f"An error occurred: {e}")
+        return {
+            "incident_category": state.get('incident_category', 'unknown'),
+            "short_description": state.get('short_description', 'unknown'),
+            "llm_response": "App outage Observed. Self-Healing Failed with AWX"
+        }
