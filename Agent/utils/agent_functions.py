@@ -326,7 +326,7 @@ def should_continue(state):
     return "reflect"
 
 def incident_data_capture_next_node(state):
-    logger.info(f"Checking if should continue: revision_number={state['revision_number']}, max_revisions={state['max_revisions']}")
+    logger.info(f"Checking iIncident Category={state['incident_category']}")
     if state["incident_category"] >= 'P0-Outage':
         return "trigger_awx_job"
     return "root_cause_analysis"
