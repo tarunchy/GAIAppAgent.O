@@ -77,6 +77,8 @@
                     <strong class="text-xl">{{ app.app_id }}</strong> - {{ app.description }}
                 </div>
                 <div class="flex items-center space-x-2">
+                    <button id="flow-app-button" data-app-id="{{ app.app_id }}" class="mt-6 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">Flow Design</button>
+
                     <a href="{{ url_for('edit_app', app_id=app.app_id) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 button">Edit</a>
                     <button
                         class="run-agent-button bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none button"
@@ -117,6 +119,13 @@
                 <div id="send_email_notification" class="node p-5 m-2 border-2 border-gray-300 rounded text-center w-36 transition-transform duration-300">Send Email Notification</div>
             </div>
             <button id="close-progress-modal" class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 button">Close</button>
+        </div>
+    </div>
+
+    <div id="popup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="relative bg-white p-4 rounded max-w-full max-h-full overflow-auto">
+            <button id="close-button" class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded">Close</button>
+            <img id="popup-image" src="" alt="Smart Grid Graph" class="max-w-full max-h-full">
         </div>
     </div>
 
@@ -319,5 +328,22 @@
             });
         });
     </script>
+
+<script>
+    document.getElementById('flow-app-button').addEventListener('click', function() {
+        const appId = this.getAttribute('data-app-id');
+        showPopup(appId);
+    });
+
+    document.getElementById('close-button').addEventListener('click', function() {
+        document.getElementById('popup').classList.add('hidden');
+    });
+
+    function showPopup(appId) {
+        const imgPath = `/static/images/${appId}_smart_grid_graph.png`;
+        document.getElementById('popup-image').src = imgPath;
+        document.getElementById('popup').classList.remove('hidden');
+    }
+</script>
 </body>
 </html>
