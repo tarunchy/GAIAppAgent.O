@@ -49,6 +49,9 @@ def run_agent_for_app_ws(app_id):
     builder.add_edge("send_email_notification", END)
 
     graph = builder.compile(checkpointer=memory)
+    # Save the graph to a file and display it
+    graph_file_path = "static/images/{app_id}_smart_grid_graph.png"
+    graph.get_graph().draw_png(graph_file_path)
 
     thread = {"configurable": {"thread_id": "1"}, "recursion_limit": 20}
     final_state = None
