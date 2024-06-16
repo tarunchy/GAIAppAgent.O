@@ -26,10 +26,10 @@ def send_progress_update(node_name, status):
     message = json.dumps({"node": node_name, "status": status})
     asyncio.run(notify_clients(message))
 
-def node_wrapper(node_func, node_name, state, app_config):
+def node_wrapper(node_func, node_name, state, app_config,action="NA"):
     try:
         send_progress_update(node_name, "in_progress")
-        result = node_func(state, app_config)
+        result = node_func(state, app_config,action)
         send_progress_update(node_name, "completed")
         return result
     except Exception as e:
