@@ -4,6 +4,11 @@
 ## Introduction
 GAIAppAgent.O is a comprehensive solution for monitoring applications within an enterprise. The agent periodically checks the health of registered applications, analyzes logs for potential issues, and takes automated actions such as creating ServiceNow tickets, sending notifications, and attempting to restart applications.
 
+## Image of Agent Flow
+![Agent Flow](agent_flow.png)
+
+AutoHealChain streamlines incident management, providing fast and efficient self-healing capabilities for app support. Thank you for watching. For further details, design code, and documentation, please refer to our code repository.
+
 ## Features
 - **Health Check Monitoring**: Periodically polls health check URLs of registered applications.
 - **Log Analysis**: Analyzes the last 100 lines of log files for potential issues using OpenAI.
@@ -179,7 +184,3 @@ These solutions are possible thanks to the excellent framework provided by LANG 
 
 Welcome to the future, where you no longer have to wake up in the middle of the night for app support issues. Let AutoHealChain's AI agent do the hard work for you, ensuring your systems are always running smoothly and securely.
 
-## Image of Agent Flow
-![Agent Flow](agent_flow.png)
-
-AutoHealChain streamlines incident management, providing fast and efficient self-healing capabilities for app support. Thank you for watching. For further details, design code, and documentation, please refer to our code repository.
