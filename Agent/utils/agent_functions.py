@@ -337,7 +337,7 @@ def should_continue(state):
         return "create_service_now_ticket"
     return "reflect"
 
-def incident_data_capture_next_node(state):
+def find_next_node(state):
     logger.info(f"Checking iIncident Category={state['incident_category']}")
     if state["incident_category"] == 'P0-Outage':
         return "trigger_awx_job"

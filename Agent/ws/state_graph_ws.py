@@ -9,7 +9,7 @@ from utils.agent_functions import (
     AgentState,
     analysis_node, root_cause_node, reflection_node, create_service_now_ticket,
     send_teams_notification, create_email_subject_body, send_email_notification,
-    should_continue,trigger_awx_job, incident_data_capture_next_node
+    should_continue,trigger_awx_job, find_next_node
 )
 from ws.websocket_handler import node_wrapper  # Import the wrapper
 
@@ -39,7 +39,7 @@ def run_agent_for_app_ws(app_id):
     builder.set_entry_point("incident_data_capture")
 
     
-    builder.add_conditional_edges("incident_data_capture", incident_data_capture_next_node)
+    builder.add_conditional_edges("incident_data_capture", find_next_node)
     builder.add_conditional_edges("root_cause_analysis", should_continue)
     builder.add_edge("reflect", "root_cause_analysis")
     builder.add_edge("trigger_awx_job", "create_service_now_ticket")
