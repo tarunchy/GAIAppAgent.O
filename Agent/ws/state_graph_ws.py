@@ -41,7 +41,7 @@ def run_agent_for_app_ws(app_id):
 
     
     builder.add_conditional_edges("incident_data_capture", find_next_node, {"self_heal_app":"self_heal_app","root_cause_analysis":"root_cause_analysis"})
-    builder.add_conditional_edges("root_cause_analysis", should_continue, {"act_on_cyber_secuirty_breach":"act_on_cyber_secuirty_breach","reflect": "reflect" })
+    builder.add_conditional_edges("root_cause_analysis", should_continue, {"act_on_cyber_secuirty_breach":"act_on_cyber_secuirty_breach","create_service_now_ticket":"create_service_now_ticket","reflect": "reflect" })
     builder.add_edge("reflect", "root_cause_analysis")
     builder.add_edge("self_heal_app", "create_service_now_ticket")
     builder.add_edge("act_on_cyber_secuirty_breach", "create_service_now_ticket")
