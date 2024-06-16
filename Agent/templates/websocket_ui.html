@@ -35,9 +35,39 @@
             font-size: 24px;
             color: #3498db;
         }
+
+        body {
+            background: url('your-background-image-url.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .header, .footer {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 1rem;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .button {
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .button:hover {
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
+    <header class="header text-center mb-6">
+        <h1 class="text-4xl font-bold">WebSocket Progress Tracker</h1>
+        <p class="text-gray-600">Monitor and manage your applications seamlessly</p>
+    </header>
+
     <div class="container mx-auto p-6">
         <h1 class="text-3xl font-bold mb-6">Apps Configuration</h1>
         <ul class="space-y-4" id="apps-list">
@@ -47,9 +77,9 @@
                     <strong class="text-xl">{{ app.app_id }}</strong> - {{ app.description }}
                 </div>
                 <div class="flex items-center space-x-2">
-                    <a href="{{ url_for('edit_app', app_id=app.app_id) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Edit</a>
+                    <a href="{{ url_for('edit_app', app_id=app.app_id) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 button">Edit</a>
                     <button
-                        class="run-agent-button bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none"
+                        class="run-agent-button bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none button"
                         data-app-id="{{ app.app_id }}"
                     >
                         Run Agent
@@ -61,8 +91,8 @@
             </li>
             {% endfor %}
         </ul>
-        <button id="add-app-button" class="mt-6 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">Add New App</button>
-        <a href="{{ url_for('active_apps') }}" class="mt-6 inline-block bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700">View Active Apps</a>
+        <button id="add-app-button" class="mt-6 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 button">Add New App</button>
+        <a href="{{ url_for('active_apps') }}" class="mt-6 inline-block bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700 button">View Active Apps</a>
     </div>
 
     <div id="progress-modal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -70,6 +100,7 @@
             <h2 class="text-2xl font-bold mb-4">Agent Progress</h2>
             <div id="progress-container" class="flex flex-wrap justify-center items-center space-x-2">
                 <div id="incident_data_capture" class="node p-5 m-2 border-2 border-gray-300 rounded text-center w-36 transition-transform duration-300">Incident Data Capture</div>
+                <div class="arrow"></div>
                 <div id="trigger_awx_job" class="node p-5 m-2 border-2 border-gray-300 rounded text-center w-36 transition-transform duration-300">Initiate Self Healing</div>
 
                 <div class="arrow"></div>
@@ -85,11 +116,9 @@
                 <div class="arrow"></div>
                 <div id="send_email_notification" class="node p-5 m-2 border-2 border-gray-300 rounded text-center w-36 transition-transform duration-300">Send Email Notification</div>
             </div>
-            <button id="close-progress-modal" class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">Close</button>
+            <button id="close-progress-modal" class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 button">Close</button>
         </div>
     </div>
-
-    
 
     <!-- Add New App Modal -->
     <div id="add-app-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50 modal">
@@ -160,12 +189,16 @@
                 </div>
     
                 <div class="flex justify-end">
-                    <button type="button" id="close-add-app" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 mr-2">Cancel</button>
-                    <button type="button" id="save-add-app" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">Save</button>
+                    <button type="button" id="close-add-app" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 mr-2 button">Cancel</button>
+                    <button type="button" id="save-add-app" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 button">Save</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <footer class="footer text-center mt-6">
+        <p class="text-gray-600">&copy; 2024 WebSocket Progress Tracker. All rights reserved.</p>
+    </footer>
 
     <script>
         $(document).ready(function() {
@@ -182,11 +215,9 @@
                 if (message.status === "in_progress") {
                     // Remove spinner and yellow background from other nodes
                     $('.node').not(nodeElement).each(function() {
-                        //$(this).removeClass('bg-yellow-200 bg-green-200 bg-red-500 text-white');
                         $(this).html($(this).data('originalContent'));
                     });
 
-                    //nodeElement.addClass('bg-yellow-200').removeClass('bg-green-200 bg-red-500 text-white');
                     nodeElement.html(`<div class="spinner"></div>`);
                 } else if (message.status === "completed") {
                     nodeElement.removeClass('bg-yellow-200');
