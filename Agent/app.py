@@ -97,6 +97,7 @@ def add_app():
         'REFLECTION_PROMPT': data.get('REFLECTION_PROMPT', 'NA'),
         'email_address': data.get('email_address', 'NA'),
         'teams_webhook_url': data.get('teams_webhook_url', 'NA'),
+        'awx_url': data.get('awx_url', 'NA'),
         'P0': data.get('P0', 'NA'),
         'enabled': data.get('enabled', 'No')
     }

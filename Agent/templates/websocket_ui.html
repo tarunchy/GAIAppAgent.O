@@ -175,6 +175,10 @@
                     <input type="text" id="new_teams_webhook_url" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" required>
                     <div class="error-message hidden" id="error-teams_webhook_url">This field is required.</div>
                 </div>
+                <div>
+                    <label for="awx_url" class="block text-sm font-medium text-gray-700">AWX URL:</label>
+                    <input type="text" id="awx_url" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" value="{{ app.awx_url }}">
+                </div>
     
                 <div>
                     <label for="new_P0" class="block text-sm font-medium text-gray-700">P0:</label>
@@ -292,6 +296,7 @@
                     REFLECTION_PROMPT: $('#new_REFLECTION_PROMPT').val(),
                     email_address: $('#new_email_address').val(),
                     teams_webhook_url: $('#new_teams_webhook_url').val(),
+                    awx_url: $('#awx_url').val(),
                     P0: $('#new_P0').val(),
                     enabled: $('#new_enabled').val(),
                     description: $('#new_description').val()
