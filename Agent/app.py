@@ -91,19 +91,19 @@ def add_app():
     new_app = {
         'app_id': data.get('app_id'),
         'description': data.get('description'),
-        'url': 'NA',
-        'INCIDENT_ANALYSIS_PROMPT': 'NA',
-        'ROOT_CAUSE_ANALYSIS_PROMPT': 'NA',
-        'REFLECTION_PROMPT': 'NA',
-        'email_address': 'NA',
-        'teams_webhook_url': 'NA',
-        'awx_url': 'NA',
-        'P0': 'NA',
-        'enabled': 'No'
+        'url': data.get('url', 'NA'),
+        'INCIDENT_ANALYSIS_PROMPT': data.get('INCIDENT_ANALYSIS_PROMPT', 'NA'),
+        'ROOT_CAUSE_ANALYSIS_PROMPT': data.get('ROOT_CAUSE_ANALYSIS_PROMPT', 'NA'),
+        'REFLECTION_PROMPT': data.get('REFLECTION_PROMPT', 'NA'),
+        'email_address': data.get('email_address', 'NA'),
+        'teams_webhook_url': data.get('teams_webhook_url', 'NA'),
+        'P0': data.get('P0', 'NA'),
+        'enabled': data.get('enabled', 'No')
     }
     apps_config.append(new_app)
     save_apps_config(apps_config)
     return jsonify({'status': 'success'})
+
 
 @app.route('/active_apps')
 def active_apps():
