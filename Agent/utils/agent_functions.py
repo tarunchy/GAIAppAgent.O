@@ -96,7 +96,7 @@ def clean_response(response):
     cleaned = re.sub(r'</?s>', '', response)
     return cleaned.strip()
 
-def analysis_node(state: AgentState, app_config):
+def analysis_node(state: AgentState, app_config,action):
     logger.info("Starting analysis_node")
     data = fetch_smart_grid_data(app_config['url'])
     if not data:
@@ -129,7 +129,7 @@ def analysis_node(state: AgentState, app_config):
         "data": json.dumps(data)
     }
 
-def root_cause_node(state: AgentState, app_config):
+def root_cause_node(state: AgentState, app_config,action):
     logger.info(f"Starting root_cause_node: {state}")
     response = generate_response([
         {"role": "system", "content": app_config['ROOT_CAUSE_ANALYSIS_PROMPT']},
@@ -145,7 +145,7 @@ def root_cause_node(state: AgentState, app_config):
         "cyber_secuirty_incident": 'No'
     }
 
-def reflection_node(state: AgentState, app_config):
+def reflection_node(state: AgentState, app_config,action):
     logger.info(f"Starting reflection_node: {state}")
     response = generate_response([
         {"role": "system", "content": app_config['REFLECTION_PROMPT']},
@@ -160,7 +160,7 @@ def reflection_node(state: AgentState, app_config):
         "revision_number": state["revision_number"] + 1
     }
 
-def create_service_now_ticket(state: AgentState, app_config):
+def create_service_now_ticket(state: AgentState, app_config,action):
     logger.info(f"Starting create_service_now_ticket: {state}")
 
     def encode_credentials(username, password):
@@ -209,7 +209,7 @@ def create_service_now_ticket(state: AgentState, app_config):
         logger.error(f"Failed to create incident. Status code: {response.status_code}")
         return state
 
-def send_teams_notification(state: AgentState, app_config):
+def send_teams_notification(state: AgentState, app_config,action):
     logger.info(f"Starting send_teams_notification: {state}")
 
     incident_url = state["incident_url"]
@@ -269,7 +269,7 @@ def send_teams_notification(state: AgentState, app_config):
             "incident_url": state['incident_url']
         }
 
-def create_email_subject_body(state: AgentState, app_config):
+def create_email_subject_body(state: AgentState, app_config,action):
     logger.info(f"Starting create_email_subject_body: {state}")
     email_prompt = f"""
     You are an AI tasked with creating an email based on the following information:
@@ -296,7 +296,7 @@ def create_email_subject_body(state: AgentState, app_config):
         "email_body": email_json.get("email_body", "Default Body")
     }
 
-def send_email_notification(state: AgentState, app_config):
+def send_email_notification(state: AgentState, app_config,action):
     logger.info(f"Starting send_email_notification: {state}")
     recipient_email = app_config["email_address"]
     incident_url = state.get("incident_url", "N/A")
