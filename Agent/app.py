@@ -57,7 +57,7 @@ ws_worker_thread.start()
 @app.route('/')
 def index():
     apps_config = load_apps_config()
-    return render_template('index.html', apps=apps_config)
+    return render_template('websocket_ui.html', apps=apps_config)
 
 @app.route('/edit/<app_id>', methods=['GET', 'POST'])
 def edit_app(app_id):
