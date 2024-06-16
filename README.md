@@ -11,7 +11,7 @@ AutoHealChain streamlines incident management, providing fast and efficient self
 
 ## Features
 - **Health Check Monitoring**: Periodically polls health check URLs of registered applications.
-- **Log Analysis**: Analyzes the last 100 lines of log files for potential issues using OpenAI.
+- **Log Analysis**: Analyzes the last 100 lines of log files for potential issues using LLM API.
 - **Incident Management**: Creates ServiceNow tickets for detected issues or application downtime.
 - **Notifications**: Sends notifications via email and Microsoft Teams.
 - **Autonomous Actions**: Attempts to restart applications if they are down using Ansible.
@@ -40,7 +40,7 @@ Example:
 - ServiceNow API credentials
 - SMTP server for sending emails
 - Microsoft Teams Webhook URL
-- LLAMA2 13B NVIDIA TRT Engine Accelerated API Endpoint Compliant with OpenAI Chat Completion API interface
+- LLAMA2 13B NVIDIA TRT Engine Accelerated API Endpoint Compliant with LLM API Chat Completion API interface
 
 ### Installation
 1. Clone the repository:
@@ -55,7 +55,7 @@ Example:
     ```
 
 3. Configure the agent:
-    - Update `config.py` with necessary details such as ServiceNow API credentials, SMTP server details, Microsoft Teams webhook URL, and OpenAI API key.
+    - Update `config.py` with necessary details such as ServiceNow API credentials, SMTP server details, Microsoft Teams webhook URL, and LLM API API key.
 
 4. Start the agent:
     ```bash
@@ -64,7 +64,7 @@ Example:
 
 ## Configuration
 - **Health Check URL**: The health check URL should return a JSON response with the required attributes.
-- **Log Analysis**: The agent sends the last 100 lines of logs to OpenAI API to detect issues.
+- **Log Analysis**: The agent sends the last 100 lines of logs to LLM API API to detect issues.
 - **ServiceNow**: Configure ServiceNow API credentials in `config.py`.
 - **Notifications**: Configure email and Microsoft Teams notification details in `config.py`.
 
@@ -148,8 +148,8 @@ GAIAppAgent.O
 2. The health check URL returns a JSON response containing the log messages, support DL, app ID, and timestamp.
 
 ### Log Analysis
-1. The agent sends the log messages to OpenAI API.
-2. The OpenAI API analyzes the logs and detects potential issues.
+1. The agent sends the log messages to LLM API API.
+2. The LLM API API analyzes the logs and detects potential issues.
 3. If an issue is detected, the agent creates a ServiceNow ticket and sends notifications to the support DL and Microsoft Teams.
 
 ### Incident Management
@@ -158,7 +158,7 @@ GAIAppAgent.O
 
 ### Notifications
 1. The agent sends notifications via email and Microsoft Teams based on the analysis and incident management results.
-2. The email content and Microsoft Teams messages are generated using OpenAI API to ensure clarity and detailed steps for the support team.
+2. The email content and Microsoft Teams messages are generated using LLM API API to ensure clarity and detailed steps for the support team.
 
 ### Autonomous Actions
 1. The agent attempts to restart applications if they are down using predefined Ansible playbooks.
@@ -167,7 +167,7 @@ GAIAppAgent.O
 ## Example Workflow
 1. **Application Registration**: Admin registers an application with its health check URL, support DL, and other details.
 2. **Periodic Health Check**: The agent polls the health check URL every hour.
-3. **Log Analysis**: The agent analyzes the logs using OpenAI API.
+3. **Log Analysis**: The agent analyzes the logs using LLM API API.
 4. **Issue Detection**: If an issue is detected, the agent creates a ServiceNow ticket and sends notifications.
 5. **Application Downtime**: If the application is down, the agent attempts to restart it using Ansible and notifies the support team.
 
