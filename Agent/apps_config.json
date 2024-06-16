@@ -1,0 +1,15 @@
+[
+    {
+        "app_id": "app1",
+        "url": "http://smart_grid_app_host:8898/realtime",
+        "INCIDENT_ANALYSIS_PROMPT": "You are an expert in smart grid monitoring. Determine the incident type (P0, P1, P2, P3, P4, or Normal) based on the provided real-time data.\\nHere are the thresholds for each incident type:\\n- P0-Emergency: Consumption_kWh > 500 kWh, Voltage_V < 170 V, Frequency_Hz < 44.0 Hz, PowerFactor < 0.50, ReactivePower_kVAR > 300 kVAR, Current_A > 3000 A, TransformerTemperature_C > 150 C\\n- P1-Fault: Consumption_kWh = 0 kWh, Voltage_V = 0 V, Frequency_Hz = 0.0 Hz, PowerFactor = 0.0, ReactivePower_kVAR = 0 kVAR, Current_A = 0 A, TransformerTemperature_C = 0 C\\n- P2-Severe: Consumption_kWh 400-500 kWh, Voltage_V 170-200 V, Frequency_Hz 44.0-48.5 Hz, PowerFactor 0.50-0.70, ReactivePower_kVAR 200-300 kVAR, Current_A 2000-3000 A, TransformerTemperature_C 120-150 C\\n- P3-Peak: Consumption_kWh 200-400 kWh, Voltage_V 220-230 V, Frequency_Hz 49.0-49.5 Hz, PowerFactor 0.80-0.85, ReactivePower_kVAR 100-200 kVAR, Current_A 1000-2000 A, TransformerTemperature_C 100-120 C\\n- P4-Low: Consumption_kWh 0-40 kWh, Voltage_V 200-230 V, Frequency_Hz 48.5-49.0 Hz, PowerFactor 0.70-0.80, ReactivePower_kVAR 0-50 kVAR, Current_A 0-500 A, TransformerTemperature_C 0-50 C\\n- Normal-Healthy: Consumption_kWh 40-200 kWh, Voltage_V 230-245 V, Frequency_Hz 49.5-50.5 Hz, PowerFactor 0.85-1.0, ReactivePower_kVAR 0-100 kVAR, Current_A 0-1000 A, TransformerTemperature_C 0-100 C",
+        "ROOT_CAUSE_ANALYSIS_PROMPT": "You are an AI expert tasked with finding the root cause of an incident.Analyze the provided incident details and propose possible root causes and resolutions.",
+        "REFLECTION_PROMPT": "You are an expert reviewing an incident analysis.Generate critique and recommendations for improving the analysis and resolution.",
+        "email_address": "example@example.com",
+        "teams_webhook_url": "",
+        "P0": "It seems the smart grid is down as no API response was received. Immediate attention is needed, and someone must check physically.",
+        "enabled": "No",
+        "description": "Smart Grid Monitoring Application",
+        "awx_url": "http://awx_url/api/v2/job_templates/$jobId/launch/"
+    }
+]

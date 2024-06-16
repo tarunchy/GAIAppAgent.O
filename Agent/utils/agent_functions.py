@@ -26,7 +26,7 @@ secrets = secrets_config['secrets']
 servicenow_instance = secrets['servicenow_instance']
 servicenow_username = secrets['servicenow_username']
 servicenow_password = secrets['servicenow_password']
-llama3_base_url = secrets['llama3_base_url']
+llama3_base_url = secrets['llama2_base_url']
 email_api_url = secrets['email_api_url']
 awx_api_token = secrets['awx_api_token']
 
