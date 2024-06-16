@@ -141,7 +141,8 @@ def root_cause_node(state: AgentState, app_config):
         "incident_category": state['incident_category'],
         "short_description": state['short_description'],
         "llm_response": llm_response,
-        "revision_number": state["revision_number"]
+        "revision_number": state["revision_number"],
+        "cyber_secuirty_incident": 'No'
     }
 
 def reflection_node(state: AgentState, app_config):
@@ -334,21 +335,24 @@ def send_email_notification(state: AgentState, app_config):
 def should_continue(state):
     logger.info(f"Checking if should continue: revision_number={state['revision_number']}, max_revisions={state['max_revisions']}")
     if state["revision_number"] >= state["max_revisions"]:
-        return "create_service_now_ticket"
+        if state["cyber_secuirty_incident"] == "No":
+            return "create_service_now_ticket"
+        else:
+            return "act_on_cyber_secuirty_breach"
     return "reflect"
 
 def find_next_node(state):
     logger.info(f"Checking iIncident Category={state['incident_category']}")
     if state["incident_category"] == 'P0-Outage':
-        return "trigger_awx_job"
+        return "self_heal_app"
     return "root_cause_analysis"
 
-def trigger_awx_job(state, app_config):
+def trigger_awx_job(state, app_config,app_action):
     try:
         # Extract details from config
         awx_url = app_config['awx_url'] 
         # Hardcode the app_action as "start"
-        app_action = "start"
+        
         
         # Headers
         headers = {
