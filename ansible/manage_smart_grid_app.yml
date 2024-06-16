@@ -1,6 +1,7 @@
 ---
 - name: Manage SmartGridMockApp
   hosts: all
+  gather_facts: no
   vars:
     app_dir: /home/dlyog/ted/omniagent/SmartGridMockApp
     app_action: ""
