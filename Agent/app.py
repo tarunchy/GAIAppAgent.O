@@ -91,14 +91,14 @@ def add_app():
     new_app = {
         'app_id': data.get('app_id'),
         'description': data.get('description'),
-        'url': '',
-        'INCIDENT_ANALYSIS_PROMPT': '',
-        'ROOT_CAUSE_ANALYSIS_PROMPT': '',
-        'REFLECTION_PROMPT': '',
-        'email_address': '',
-        'teams_webhook_url': '',
-        'awx_url': '',
-        'P0': '',
+        'url': 'NA',
+        'INCIDENT_ANALYSIS_PROMPT': 'NA',
+        'ROOT_CAUSE_ANALYSIS_PROMPT': 'NA',
+        'REFLECTION_PROMPT': 'NA',
+        'email_address': 'NA',
+        'teams_webhook_url': 'NA',
+        'awx_url': 'NA',
+        'P0': 'NA',
         'enabled': 'No'
     }
     apps_config.append(new_app)
