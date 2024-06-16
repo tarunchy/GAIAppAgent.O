@@ -2,6 +2,11 @@
 import asyncio
 import websockets
 import json
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 connected_clients = set()
 
@@ -22,10 +27,14 @@ def send_progress_update(node_name, status):
     asyncio.run(notify_clients(message))
 
 def node_wrapper(node_func, node_name, state, app_config):
-    send_progress_update(node_name, "in_progress")
-    result = node_func(state, app_config)
-    send_progress_update(node_name, "completed")
-    return result
+    try:
+        send_progress_update(node_name, "in_progress")
+        result = node_func(state, app_config)
+        send_progress_update(node_name, "completed")
+        return result
+    except Exception as e:
+        send_progress_update(node_name, "error")
+        logger.error(f"Error in node {node_name}: {e}")
 
 def start_websocket_server():
     loop = asyncio.new_event_loop()

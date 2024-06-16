@@ -244,7 +244,7 @@ def send_teams_notification(state: AgentState, app_config):
     headers = {
         "Content-Type": "application/json"
     }
-    response = httpx.post(app_config['teams_webhook_url'], headers=headers, json=message)
+    response = httpx.post(app_config['teams_webhook_url'], headers=headers, json=message, timeout=180)
     if response.status_code == 200:
         logger.info("Notification sent to Microsoft Teams successfully")
 
@@ -260,7 +260,13 @@ def send_teams_notification(state: AgentState, app_config):
         }
     else:
         logger.error(f"Failed to send notification to Microsoft Teams. Status code: {response.status_code}")
-        return state
+        return {
+            "INC_NO": state['INC_NO'],
+            "incident_category": state['incident_category'],
+            "short_description": state['short_description'],
+            "llm_response": state['llm_response'],
+            "incident_url": state['incident_url']
+        }
 
 def create_email_subject_body(state: AgentState, app_config):
     logger.info(f"Starting create_email_subject_body: {state}")
@@ -317,7 +323,13 @@ def send_email_notification(state: AgentState, app_config):
         }
     else:
         logger.error(f"Failed to send email. Status code: {response.status_code}")
-        return state
+        return {
+            "INC_NO": state['INC_NO'],
+            "incident_category": state['incident_category'],
+            "short_description": state['short_description'],
+            "llm_response": state['llm_response'],
+            "incident_url": state['incident_url']
+        }
 
 def should_continue(state):
     logger.info(f"Checking if should continue: revision_number={state['revision_number']}, max_revisions={state['max_revisions']}")
