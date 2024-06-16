@@ -28,10 +28,10 @@ def run_agent_for_app_ws(app_id):
     builder = StateGraph(AgentState)
 
     builder.add_node("incident_data_capture", lambda state: node_wrapper(analysis_node, "incident_data_capture", state, app_config))
-    builder.add_node("self_heal_app", lambda state: node_wrapper(trigger_awx_job, "trigger_awx_job", state, app_config,"start"))
+    builder.add_node("self_heal_app", lambda state: node_wrapper(trigger_awx_job, "self_heal_app", state, app_config,"start"))
     builder.add_node("root_cause_analysis", lambda state: node_wrapper(root_cause_node, "root_cause_analysis", state, app_config))
     builder.add_node("reflect", lambda state: node_wrapper(reflection_node, "reflect", state, app_config))
-    builder.add_node("act_on_cyber_secuirty_breach", lambda state: node_wrapper(trigger_awx_job, "trigger_awx_job", state, app_config,"stop"))
+    builder.add_node("act_on_cyber_secuirty_breach", lambda state: node_wrapper(trigger_awx_job, "act_on_cyber_secuirty_breach", state, app_config,"stop"))
     builder.add_node("create_service_now_ticket", lambda state: node_wrapper(create_service_now_ticket, "create_service_now_ticket", state, app_config))
     builder.add_node("send_teams_notification", lambda state: node_wrapper(send_teams_notification, "send_teams_notification", state, app_config))
     builder.add_node("create_email_subject_body", lambda state: node_wrapper(create_email_subject_body, "create_email_subject_body", state, app_config))
