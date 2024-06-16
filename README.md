@@ -1,3 +1,4 @@
+
 # GAIAppAgent.O
 
 ## Introduction
@@ -53,7 +54,7 @@ Example:
 
 4. Start the agent:
     ```bash
-    python agent/main.py
+    ./start.sh
     ```
 
 ## Configuration
@@ -63,13 +64,78 @@ Example:
 - **Notifications**: Configure email and Microsoft Teams notification details in `config.py`.
 
 ## Directory Structure
-- **agent/**: Contains the main logic for the agent, including health checks, log analysis, ServiceNow integration, notifications, and Ansible playbook execution.
-- **ansible/**: Contains Ansible playbooks for restarting applications on Linux and Windows.
-- **scripts/**: Contains setup and installation scripts.
-- **requirements.txt**: Lists the Python dependencies required for the project.
+```
+GAIAppAgent.O
+├── Agent
+│   ├── app.py
+│   ├── config.ini
+│   ├── requirements.txt
+│   ├── start.sh
+│   ├── static
+│   │   ├── css
+│   │   │   └── styles.css
+│   │   ├── fhir_kg.png
+│   │   ├── images
+│   │   │   ├── agent.png
+│   │   │   ├── agent1.png
+│   │   │   └── agent_flow.png
+│   │   └── js
+│   │       └── scripts.js
+│   ├── templates
+│   │   ├── active_apps.html
+│   │   ├── edit.html
+│   │   ├── index.html
+│   │   └── websocket_ui.html
+│   ├── utils
+│   │   ├── agent_functions.py
+│   │   ├── config.ini
+│   │   ├── config_loader.py
+│   │   ├── notifier.py
+│   │   └── state_graph.py
+│   └── ws
+│       ├── state_graph_ws.py
+│       └── websocket_handler.py
+├── README.md
+├── SmartGridMockApp
+│   ├── app.py
+│   ├── data.json
+│   ├── start.sh
+│   ├── static
+│   │   ├── css
+│   │   │   └── styles.css
+│   │   └── js
+│   │       └── scripts.js
+│   ├── stop.sh
+│   └── templates
+│       └── dashboard.html
+├── ansible
+│   ├── manage_smart_grid_app.yml
+│   └── test_host.yml
+├── api_app
+│   ├── README.md
+│   ├── app.py
+│   ├── config
+│   │   ├── app_config.json
+│   │   ├── config.json
+│   │   └── preferences.json
+│   ├── prompts.txt
+│   ├── requirements.txt
+│   ├── start.bat
+│   ├── trt_llama_api.py
+│   ├── utils.py
+│   └── verify_install.py
+├── requirements.txt
+├── setup_project.sh
+└── start.sh
+```
+17 directories, 45 files
 
-## Contributing
-We welcome contributions! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute.
+## Technology Flow
+- **Browser**: User interacts with the application through a browser.
+- **Apache Web Server**: Handles incoming requests and forwards them to the Flask Python App.
+- **Flask Python App Agent**: Manages health checks, log analysis, and incident management.
+- **API Layer**: Utilizes Meta's 13B Model exposed as REST API for advanced processing.
+- **NVIDIA GPU**: Accelerates AI operations using the RTX 3090 Ti.
 
 ## Detailed Design and Workflow
 ### Health Check Monitoring
@@ -104,3 +170,16 @@ We welcome contributions! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for
 - Implement more advanced log analysis using machine learning models.
 - Integrate with additional notification systems (e.g., Slack, PagerDuty).
 - Enhance self-healing capabilities with more sophisticated Ansible playbooks.
+
+## Advanced Features
+### Root Cause Analysis and Reflection
+Within our chain graph, we have two critical nodes: the Root Cause Analysis node and the Reflect node. These nodes interact in a loop for three iterations. The Root Cause Analysis node prompts the LLM to identify the issue, and the Reflect node reviews and updates the findings. This back-and-forth ensures a thorough and accurate diagnosis.
+
+These solutions are possible thanks to the excellent framework provided by LANG chain and LANG graph, Meta's LLAMA 13B accelerated model by TRT engine, and, of course, the backbone powered by NVIDIA GPU. Here, we used the RTX 3090 Ti.
+
+Welcome to the future, where you no longer have to wake up in the middle of the night for app support issues. Let AutoHealChain's AI agent do the hard work for you, ensuring your systems are always running smoothly and securely.
+
+## Image of Agent Flow
+![Agent Flow](https://github.com/tarunchy/GAIAppAgent.O/tree/main/Agent/static/images/agent_flow.png)
+
+AutoHealChain streamlines incident management, providing fast and efficient self-healing capabilities for app support. Thank you for watching. For further details, design code, and documentation, please refer to our code repository.
