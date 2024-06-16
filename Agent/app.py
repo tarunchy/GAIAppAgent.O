@@ -74,6 +74,7 @@ def edit_app(app_id):
         app_config['REFLECTION_PROMPT'] = data.get('REFLECTION_PROMPT')
         app_config['email_address'] = data.get('email_address')
         app_config['teams_webhook_url'] = data.get('teams_webhook_url')
+        app_config['awx_url'] = data.get('awx_url')
         app_config['P0'] = data.get('P0')
         app_config['enabled'] = data.get('enabled')
         app_config['description'] = data.get('description')
@@ -96,6 +97,7 @@ def add_app():
         'REFLECTION_PROMPT': '',
         'email_address': '',
         'teams_webhook_url': '',
+        'awx_url': '',
         'P0': '',
         'enabled': 'No'
     }
